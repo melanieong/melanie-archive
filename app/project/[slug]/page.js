@@ -223,16 +223,8 @@ export default function ProjectDetailPage({ params }) {
         <nav className={`${mobileMenuOpen ? 'flex' : 'hidden'} md:flex flex-col md:flex-grow space-y-2 md:space-y-space-1 w-full mt-4 md:mt-0 pb-4 md:pb-0`}>
           <Link href="/" className="flex items-center gap-space-3 py-space-2 rounded-lg text-on-surface-variant pl-4 hover:bg-ceramic transition-colors active-scale">
             <span className="material-symbols-outlined">dashboard</span>
-            <span className="font-label-md text-label-md">Overview</span>
+            <span className="font-label-md text-label-md">Blog</span>
           </Link>
-          <a href="#" onClick={(e) => { e.preventDefault(); alert("Admin Mode is secured via WordPress Dashboard."); }} className="flex items-center gap-space-3 py-space-2 rounded-lg text-primary font-bold border-r-4 border-primary pl-4 hover:bg-ceramic transition-colors active-scale">
-            <span className="material-symbols-outlined">folder_open</span>
-            <span className="font-label-md text-label-md">Projects</span>
-          </a>
-          <a href="http://melanie-archive-backend.local/wp-admin/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-space-3 py-space-2 rounded-lg text-on-surface-variant pl-4 hover:bg-ceramic transition-colors active-scale">
-            <span className="material-symbols-outlined">settings</span>
-            <span className="font-label-md text-label-md">WP Admin</span>
-          </a>
           <div className="flex items-center justify-between py-space-2 px-space-2 pl-4 rounded-lg hover:bg-ceramic transition-colors w-full text-on-surface-variant font-semibold select-none">
             <div className="flex items-center gap-space-3">
               <span 

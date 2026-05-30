@@ -240,16 +240,8 @@ export default function HomePage() {
         <nav className={`${mobileMenuOpen ? 'flex' : 'hidden'} md:flex flex-col md:flex-grow space-y-2 md:space-y-space-1 w-full mt-4 md:mt-0 pb-4 md:pb-0`}>
           <Link href="/" className="flex items-center gap-space-3 py-space-2 rounded-lg text-primary font-bold border-r-4 border-primary pl-4 hover:bg-ceramic transition-colors active-scale">
             <span className="material-symbols-outlined">dashboard</span>
-            <span className="font-label-md text-label-md">Overview</span>
+            <span className="font-label-md text-label-md">Blog</span>
           </Link>
-          <a href="#" onClick={(e) => { e.preventDefault(); alert("Admin Mode is secured via WordPress Dashboard."); }} className="flex items-center gap-space-3 py-space-2 rounded-lg text-on-surface-variant pl-4 hover:bg-ceramic transition-colors active-scale">
-            <span className="material-symbols-outlined">folder_open</span>
-            <span className="font-label-md text-label-md">Projects</span>
-          </a>
-          <a href="http://melanie-archive-backend.local/wp-admin/" target="_blank" rel="noopener noreferrer" className="flex items-center gap-space-3 py-space-2 rounded-lg text-on-surface-variant pl-4 hover:bg-ceramic transition-colors active-scale">
-            <span className="material-symbols-outlined">settings</span>
-            <span className="font-label-md text-label-md">WP Admin</span>
-          </a>
           <div className="flex items-center justify-between py-space-2 px-space-2 pl-4 rounded-lg hover:bg-ceramic transition-colors w-full text-on-surface-variant font-semibold select-none">
             <div className="flex items-center gap-space-3">
               <span 
@@ -427,40 +419,33 @@ export default function HomePage() {
                 // Projects Grid Layout (Brutalist card layout)
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {filteredProjects.map((p) => {
-                    const featuredImgUrl = p.featuredImage || "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80";
                     const statusText = p.status || 'Ongoing';
                     
                     return (
                       <div 
                         key={p.slug} 
-                        className="bg-surface rounded-xl card-whisper group cursor-pointer overflow-hidden transition-all duration-300 hover:-translate-y-1 active-scale w-full text-left scrapbook-card scrapbook-photo-card"
+                        className="bg-surface rounded-xl card-whisper group cursor-pointer overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] active-scale w-full text-left scrapbook-card scrapbook-photo-card aspect-square border border-ceramic p-6 flex flex-col justify-between"
                       >
-                        <Link href={`/project/${p.slug}`} className="block">
-                          <div className="aspect-video relative overflow-hidden border-b border-ceramic">
-                            <img 
-                              className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
-                              src={featuredImgUrl} 
-                              alt={p.name}
-                            />
-                            <div className="absolute top-4 left-4 bg-primary-container text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm">
-                              {p.name}
-                            </div>
-                          </div>
-                          <div className="p-space-4">
-                            <div className="flex justify-between items-center mb-1">
-                              <span className="font-label-md text-xs uppercase tracking-wider text-secondary font-bold">
-                                Learning Journey
+                        <Link href={`/project/${p.slug}`} className="flex flex-col justify-between h-full w-full">
+                          <div>
+                            <div className="flex justify-between items-center mb-4">
+                              <span className="bg-green-light text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                                Journey
                               </span>
                               <span className="font-label-md text-xs text-outline font-semibold">
-                                {p.posts.length} {p.posts.length === 1 ? 'Entry' : 'Entries'}
+                                {statusText}
                               </span>
                             </div>
-                            <h3 className="font-headline-serif text-2xl text-primary font-bold leading-tight group-hover:text-primary-container transition-colors truncate">
+                            <h3 className="font-headline-serif text-3xl text-primary font-bold leading-tight group-hover:text-primary-container transition-colors line-clamp-3 mt-4">
                               {p.name}
                             </h3>
-                            <p className="font-body-md text-sm text-on-surface-variant mt-2 line-clamp-2 leading-relaxed">
-                              {p.posts[0] ? stripHtml(p.posts[0].content) : "No entries in this journey yet."}
-                            </p>
+                          </div>
+                          
+                          <div className="pt-4 border-t border-ceramic flex justify-between items-center w-full">
+                            <span className="font-label-md text-xs uppercase tracking-wider text-secondary font-bold">
+                              {p.posts.length} {p.posts.length === 1 ? 'Entry' : 'Entries'}
+                            </span>
+                            <span className="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform">arrow_forward</span>
                           </div>
                         </Link>
                       </div>
