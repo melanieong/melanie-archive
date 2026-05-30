@@ -1,11 +1,11 @@
 "use client";
 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, use } from 'react';
 import Link from 'next/link';
 import { fetchWordPressPostBySlug, fetchWordPressPosts } from '../../../lib/wordpress';
 
 export default function ProjectDetailPage({ params }) {
-  const { slug } = params;
+  const { slug } = use(params);
   const [post, setPost] = useState(null);
   const [relatedMilestones, setRelatedMilestones] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -26,25 +26,29 @@ export default function ProjectDetailPage({ params }) {
   const [scrapbookMode, setScrapbookMode] = useState(false);
 
   useEffect(() => {
+    const sanitizeSlug = (str) => {
+      if (!str) return '';
+      return str.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, '');
+    };
+
     async function loadData() {
       // Fetch all posts, mapping categories to simulate a timeline of milestones
       const allPosts = await fetchWordPressPosts();
 
       // Find all posts that belong to the category matching the slug
-      // We will match either category.slug === slug OR slug.replace(/-/g, ' ').toLowerCase() === category.name.toLowerCase()
       const categoryPosts = allPosts.filter(p => 
         p.categories?.nodes?.some(c => 
-          c.slug === slug || 
-          c.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') === slug.toLowerCase()
+          (c.slug && sanitizeSlug(c.slug) === sanitizeSlug(slug)) || 
+          (c.name && sanitizeSlug(c.name) === sanitizeSlug(slug))
         )
       );
 
       // Get the category name
-      let catName = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()); // default fallback
+      let catName = slug ? slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()) : 'Project'; // default fallback
       if (categoryPosts.length > 0) {
         const matchingCat = categoryPosts[0].categories?.nodes?.find(c => 
-          c.slug === slug || 
-          c.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') === slug.toLowerCase()
+          (c.slug && sanitizeSlug(c.slug) === sanitizeSlug(slug)) || 
+          (c.name && sanitizeSlug(c.name) === sanitizeSlug(slug))
         );
         if (matchingCat) {
           catName = matchingCat.name;
@@ -53,15 +57,15 @@ export default function ProjectDetailPage({ params }) {
 
       // Check if there is an "Intro" or "About" post for this category to use as the monograph description
       const introPost = categoryPosts.find(p => 
-        p.tags?.nodes?.some(t => t.name.toLowerCase() === 'intro' || t.name.toLowerCase() === 'about') ||
-        p.slug.endsWith('-intro') || p.slug.endsWith('-about')
-      ) || categoryPosts[categoryPosts.length - 1]; // fallback to oldest post if no intro
+        p.tags?.nodes?.some(t => t.name && (t.name.toLowerCase() === 'intro' || t.name.toLowerCase() === 'about')) ||
+        (p.slug && (p.slug.endsWith('-intro') || p.slug.endsWith('-about')))
+      ) || (categoryPosts.length > 0 ? categoryPosts[categoryPosts.length - 1] : null); // fallback to oldest post if no intro
 
       // Set the main Journey details
       const journeyDetails = {
         title: catName,
         content: introPost ? introPost.content : `<p>A timeline of learning entries and milestones documenting Melanie's progress in <strong>${catName}</strong>.</p>`,
-        date: introPost ? introPost.date : (categoryPosts[categoryPosts.length - 1]?.date || 'Ongoing'),
+        date: introPost ? introPost.date : (categoryPosts.length > 0 ? (categoryPosts[categoryPosts.length - 1]?.date || 'Ongoing') : 'Ongoing'),
         featuredImage: {
           node: {
             sourceUrl: categoryPosts.find(p => p.featuredImage?.node?.sourceUrl)?.featuredImage?.node?.sourceUrl || "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80"
