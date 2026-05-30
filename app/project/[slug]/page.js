@@ -110,15 +110,17 @@ export default function ProjectDetailPage({ params }) {
     return htmlStr.replace(/<\/?[^>]+(>|$)/g, "").trim();
   };
 
-  // Extract milestones categories (types)
-  const getMilestoneCategories = () => {
-    const cats = new Set();
+  // Extract milestones tags
+  const getMilestoneTags = () => {
+    const tags = new Set();
     relatedMilestones.forEach(m => {
-      m.categories?.nodes?.forEach(c => {
-        cats.add(c.name);
+      m.tags?.nodes?.forEach(t => {
+        if (t.name) {
+          tags.add(t.name);
+        }
       });
     });
-    return Array.from(cats);
+    return Array.from(tags);
   };
 
   // Helper to open Lightbox Modal
@@ -153,10 +155,10 @@ export default function ProjectDetailPage({ params }) {
       );
     }
 
-    // Type filter
+    // Tag filter
     if (activeTypeFilter !== 'All') {
       list = list.filter(m => 
-        m.categories?.nodes?.some(c => c.name.toLowerCase() === activeTypeFilter.toLowerCase())
+        m.tags?.nodes?.some(t => t.name.toLowerCase() === activeTypeFilter.toLowerCase())
       );
     }
 
@@ -336,22 +338,22 @@ export default function ProjectDetailPage({ params }) {
               {/* Filter Timeline Bar */}
               <div className="bg-surface-container-lowest p-5 rounded-xl border border-outline-variant flex flex-col lg:flex-row lg:items-center justify-between gap-space-4 relative shadow-sm text-left">
                 
-                {/* Type Chips */}
+                {/* Tag Chips */}
                 <div className="flex flex-wrap items-center gap-2">
-                  <span className="font-label-md text-outline uppercase tracking-wider mr-2 text-xs">Type:</span>
+                  <span className="font-label-md text-outline uppercase tracking-wider mr-2 text-xs">Tags:</span>
                   <button 
                     onClick={() => setActiveTypeFilter('All')} 
                     className={`px-4 py-1.5 rounded-full font-label-md text-xs transition-all active-scale ${activeTypeFilter === 'All' ? 'bg-primary text-white border border-primary' : 'border border-outline text-on-surface hover:bg-surface-container-high'}`}
                   >
-                    All Types
+                    All Tags
                   </button>
-                  {getMilestoneCategories().map(cat => (
+                  {getMilestoneTags().map(tag => (
                     <button 
-                      key={cat}
-                      onClick={() => setActiveTypeFilter(cat)} 
-                      className={`px-4 py-1.5 rounded-full font-label-md text-xs transition-all active-scale ${activeTypeFilter === cat ? 'bg-primary text-white border border-primary' : 'border border-outline text-on-surface hover:bg-surface-container-high'}`}
+                      key={tag}
+                      onClick={() => setActiveTypeFilter(tag)} 
+                      className={`px-4 py-1.5 rounded-full font-label-md text-xs transition-all active-scale ${activeTypeFilter === tag ? 'bg-primary text-white border border-primary' : 'border border-outline text-on-surface hover:bg-surface-container-high'}`}
                     >
-                      {cat}
+                      {tag}
                     </button>
                   ))}
                 </div>
