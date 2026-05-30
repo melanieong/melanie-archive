@@ -112,27 +112,64 @@ export default function HomePage() {
     }
   };
 
-  // Filtered and Sorted Projects
+  // Group WordPress posts into Journeys (by category)
+  const getJourneys = () => {
+    const journeysMap = {};
+    posts.forEach(post => {
+      post.categories?.nodes?.forEach(cat => {
+        const nameLower = cat.name.toLowerCase();
+        // Exclude utility tags used for status/featuring
+        if (nameLower !== 'featured' && nameLower !== 'ongoing' && nameLower !== 'archived' && nameLower !== 'standard') {
+          if (!journeysMap[cat.name]) {
+            journeysMap[cat.name] = {
+              name: cat.name,
+              slug: cat.slug || cat.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)/g, ''),
+              posts: [],
+              status: 'Ongoing',
+              featuredImage: null
+            };
+          }
+          journeysMap[cat.name].posts.push(post);
+
+          // If the post has a status tag, associate it with the journey
+          post.categories?.nodes?.forEach(statusCat => {
+            const statusLower = statusCat.name.toLowerCase();
+            if (statusLower === 'featured' || statusLower === 'ongoing' || statusLower === 'archived') {
+              journeysMap[cat.name].status = statusCat.name;
+            }
+          });
+
+          // Use the featured image of the newest post as the journey's featured image
+          if (!journeysMap[cat.name].featuredImage && post.featuredImage?.node?.sourceUrl) {
+            journeysMap[cat.name].featuredImage = post.featuredImage.node.sourceUrl;
+          }
+        }
+      });
+    });
+
+    return Object.values(journeysMap);
+  };
+
+  // Filtered and Sorted Projects (Journeys)
   const getFilteredProjects = () => {
-    let list = [...posts];
+    let list = getJourneys();
 
     // Search filter
     if (searchQuery.trim() !== '') {
       const q = searchQuery.toLowerCase();
-      list = list.filter(p => 
-        p.title.toLowerCase().includes(q) || 
-        stripHtml(p.content).toLowerCase().includes(q)
+      list = list.filter(j => 
+        j.name.toLowerCase().includes(q) || 
+        j.posts.some(p => p.title.toLowerCase().includes(q) || stripHtml(p.content).toLowerCase().includes(q))
       );
     }
 
     // Status filter
     if (currentFilter !== 'All') {
-      list = list.filter(p => {
-        const categories = p.categories?.nodes?.map(c => c.name.toLowerCase()) || [];
+      list = list.filter(j => {
         if (currentFilter === 'Ongoing') {
-          return categories.includes('ongoing') || categories.includes('in progress');
+          return j.status.toLowerCase() === 'ongoing' || j.status.toLowerCase() === 'in progress';
         }
-        return categories.includes(currentFilter.toLowerCase());
+        return j.status.toLowerCase() === currentFilter.toLowerCase();
       });
     }
 
@@ -384,12 +421,12 @@ export default function HomePage() {
                 // Projects Grid Layout (Brutalist card layout)
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {filteredProjects.map((p) => {
-                    const featuredImgUrl = p.featuredImage?.node?.sourceUrl || "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80";
-                    const statusText = p.categories?.nodes?.some(c => c.name === 'Featured') ? 'Featured' : (p.categories?.nodes?.some(c => c.name === 'Ongoing') ? 'Ongoing' : 'Standard');
+                    const featuredImgUrl = p.featuredImage || "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80";
+                    const statusText = p.status || 'Ongoing';
                     
                     return (
                       <div 
-                        key={p.id} 
+                        key={p.slug} 
                         className="bg-surface rounded-xl card-whisper group cursor-pointer overflow-hidden transition-all duration-300 hover:-translate-y-1 active-scale w-full text-left scrapbook-card scrapbook-photo-card"
                       >
                         <Link href={`/project/${p.slug}`} className="block">
@@ -397,26 +434,26 @@ export default function HomePage() {
                             <img 
                               className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" 
                               src={featuredImgUrl} 
-                              alt={p.title}
+                              alt={p.name}
                             />
                             <div className="absolute top-4 left-4 bg-primary-container text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm">
-                              {p.categories?.nodes?.[0]?.name || 'Archive'}
+                              {p.name}
                             </div>
                           </div>
                           <div className="p-space-4">
                             <div className="flex justify-between items-center mb-1">
                               <span className="font-label-md text-xs uppercase tracking-wider text-secondary font-bold">
-                                {p.categories?.nodes?.[1]?.name || 'Creative Piece'}
+                                Learning Journey
                               </span>
                               <span className="font-label-md text-xs text-outline font-semibold">
-                                {formatDate(p.date)}
+                                {p.posts.length} {p.posts.length === 1 ? 'Entry' : 'Entries'}
                               </span>
                             </div>
                             <h3 className="font-headline-serif text-2xl text-primary font-bold leading-tight group-hover:text-primary-container transition-colors truncate">
-                              {p.title}
+                              {p.name}
                             </h3>
                             <p className="font-body-md text-sm text-on-surface-variant mt-2 line-clamp-2 leading-relaxed">
-                              {stripHtml(p.content)}
+                              {p.posts[0] ? stripHtml(p.posts[0].content) : "No entries in this journey yet."}
                             </p>
                           </div>
                         </Link>

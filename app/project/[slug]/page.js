@@ -27,19 +27,53 @@ export default function ProjectDetailPage({ params }) {
 
   useEffect(() => {
     async function loadData() {
-      const mainPost = await fetchWordPressPostBySlug(slug);
-      setPost(mainPost);
-
       // Fetch all posts, mapping categories to simulate a timeline of milestones
       const allPosts = await fetchWordPressPosts();
-      // Related milestones are simulated by other posts sharing some category/tag tags
-      const currentCategory = mainPost?.categories?.nodes?.[0]?.name || '';
-      const related = allPosts.filter(p => 
-        p.id !== mainPost?.id && 
-        p.categories?.nodes?.some(c => c.name === currentCategory)
+
+      // Find all posts that belong to the category matching the slug
+      // We will match either category.slug === slug OR slug.replace(/-/g, ' ').toLowerCase() === category.name.toLowerCase()
+      const categoryPosts = allPosts.filter(p => 
+        p.categories?.nodes?.some(c => 
+          c.slug === slug || 
+          c.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') === slug.toLowerCase()
+        )
       );
-      setRelatedMilestones(related.length > 0 ? related : allPosts.slice(0, 3));
-      
+
+      // Get the category name
+      let catName = slug.replace(/-/g, ' ').replace(/\b\w/g, c => c.toUpperCase()); // default fallback
+      if (categoryPosts.length > 0) {
+        const matchingCat = categoryPosts[0].categories?.nodes?.find(c => 
+          c.slug === slug || 
+          c.name.toLowerCase().replace(/[^a-z0-9]+/g, '-') === slug.toLowerCase()
+        );
+        if (matchingCat) {
+          catName = matchingCat.name;
+        }
+      }
+
+      // Check if there is an "Intro" or "About" post for this category to use as the monograph description
+      const introPost = categoryPosts.find(p => 
+        p.tags?.nodes?.some(t => t.name.toLowerCase() === 'intro' || t.name.toLowerCase() === 'about') ||
+        p.slug.endsWith('-intro') || p.slug.endsWith('-about')
+      ) || categoryPosts[categoryPosts.length - 1]; // fallback to oldest post if no intro
+
+      // Set the main Journey details
+      const journeyDetails = {
+        title: catName,
+        content: introPost ? introPost.content : `<p>A timeline of learning entries and milestones documenting Melanie's progress in <strong>${catName}</strong>.</p>`,
+        date: introPost ? introPost.date : (categoryPosts[categoryPosts.length - 1]?.date || 'Ongoing'),
+        featuredImage: {
+          node: {
+            sourceUrl: categoryPosts.find(p => p.featuredImage?.node?.sourceUrl)?.featuredImage?.node?.sourceUrl || "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80"
+          }
+        },
+        categories: {
+          nodes: [{ name: catName }]
+        }
+      };
+
+      setPost(journeyDetails);
+      setRelatedMilestones(categoryPosts);
       setLoading(false);
 
       const storedTheme = localStorage.getItem('mel_scrapbook_theme');
