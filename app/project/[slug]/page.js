@@ -4,6 +4,112 @@ import { useState, useEffect, use } from 'react';
 import Link from 'next/link';
 import { fetchWordPressPostBySlug, fetchWordPressPosts } from '../../../lib/wordpress';
 
+const categoryColorMap = {
+  'coding': {
+    bg: '#eaf4ee',      // Soft Matcha Green
+    border: '#bcdba8',
+    text: '#123f24',
+    badgeBg: '#bcdba8',
+    badgeText: '#123f24'
+  },
+  'dev': {
+    bg: '#eaf4ee',
+    border: '#bcdba8',
+    text: '#123f24',
+    badgeBg: '#bcdba8',
+    badgeText: '#123f24'
+  },
+  'design': {
+    bg: '#fdf0ea',      // Warm Terracotta / Peach
+    border: '#f6bba8',
+    text: '#5c2c1e',
+    badgeBg: '#f6bba8',
+    badgeText: '#5c2c1e'
+  },
+  'creative': {
+    bg: '#fdf0ea',
+    border: '#f6bba8',
+    text: '#5c2c1e',
+    badgeBg: '#f6bba8',
+    badgeText: '#5c2c1e'
+  },
+  'writing': {
+    bg: '#faf3fc',      // Soft Lavender
+    border: '#d4beea',
+    text: '#4a154b',
+    badgeBg: '#d4beea',
+    badgeText: '#4a154b'
+  },
+  'archive': {
+    bg: '#faf3fc',
+    border: '#d4beea',
+    text: '#4a154b',
+    badgeBg: '#d4beea',
+    badgeText: '#4a154b'
+  },
+  'featured': {
+    bg: '#fdfae6',      // Chalky Mustard
+    border: '#f4db96',
+    text: '#524317',
+    badgeBg: '#f4db96',
+    badgeText: '#524317'
+  },
+  'music': {
+    bg: '#e6f0fa',      // Soft Blue
+    border: '#b3d2ed',
+    text: '#1b3c59',
+    badgeBg: '#b3d2ed',
+    badgeText: '#1b3c59'
+  },
+  'photography': {
+    bg: '#eafcf6',      // Muted Sage Teal
+    border: '#9bd6bd',
+    text: '#124c32',
+    badgeBg: '#9bd6bd',
+    badgeText: '#124c32'
+  }
+};
+
+export function getCategoryStyle(categoryName) {
+  if (!categoryName) {
+    return {
+      bg: '#faf6ee', // Default notepad warm cream
+      border: '#c4c7c7',
+      text: '#00482f',
+      badgeBg: '#d4e9e2',
+      badgeText: '#00482f'
+    };
+  }
+
+  const nameLower = categoryName.toLowerCase().trim();
+  if (categoryColorMap[nameLower]) {
+    return categoryColorMap[nameLower];
+  }
+
+  for (const key in categoryColorMap) {
+    if (nameLower.includes(key)) {
+      return categoryColorMap[key];
+    }
+  }
+
+  // Hash-based fallback
+  const colors = [
+    { bg: '#fdf0ea', border: '#f6bba8', text: '#5c2c1e', badgeBg: '#f6bba8', badgeText: '#5c2c1e' }, // Peach
+    { bg: '#eaf4ee', border: '#bcdba8', text: '#123f24', badgeBg: '#bcdba8', badgeText: '#123f24' }, // Matcha
+    { bg: '#faf3fc', border: '#d4beea', text: '#4a154b', badgeBg: '#d4beea', badgeText: '#4a154b' }, // Lavender
+    { bg: '#e6f0fa', border: '#b3d2ed', text: '#1b3c59', badgeBg: '#b3d2ed', badgeText: '#1b3c59' }, // Blue
+    { bg: '#eafcf6', border: '#9bd6bd', text: '#124c32', badgeBg: '#9bd6bd', badgeText: '#124c32' }, // Teal
+    { bg: '#fdfae6', border: '#f4db96', text: '#524317', badgeBg: '#f4db96', badgeText: '#524317' }  // Yellow
+  ];
+
+  let hash = 0;
+  for (let i = 0; i < categoryName.length; i++) {
+    hash = categoryName.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % colors.length;
+  return colors[index];
+}
+
 export default function ProjectDetailPage({ params }) {
   const { slug } = use(params);
   const [post, setPost] = useState(null);
@@ -219,6 +325,7 @@ export default function ProjectDetailPage({ params }) {
     );
   }
 
+  const catStyle = getCategoryStyle(post?.title);
   const featuredImgUrl = customCoverUrl || post.featuredImage?.node?.sourceUrl || "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80";
 
   return (
@@ -387,19 +494,36 @@ export default function ProjectDetailPage({ params }) {
                   <span className="font-label-md text-outline uppercase tracking-wider mr-2 text-xs">Tags:</span>
                   <button 
                     onClick={() => setActiveTypeFilter('All')} 
-                    className={`px-4 py-1.5 rounded-full font-label-md text-xs transition-all active-scale ${activeTypeFilter === 'All' ? 'bg-primary text-white border border-primary' : 'border border-outline text-on-surface hover:bg-surface-container-high'}`}
+                    className={`px-4 py-1.5 rounded-full font-label-md text-xs transition-all active-scale border transition-colors ${activeTypeFilter === 'All' ? 'bg-primary text-white border-primary' : 'border-outline text-on-surface hover:bg-surface-container-high'}`}
+                    style={scrapbookMode ? {
+                      backgroundColor: activeTypeFilter === 'All' ? catStyle.badgeBg : '#f5f2eb',
+                      color: activeTypeFilter === 'All' ? catStyle.badgeText : catStyle.text,
+                      borderColor: catStyle.border
+                    } : {}}
                   >
                     All Tags
                   </button>
-                  {getMilestoneTags().map(tag => (
-                    <button 
-                      key={tag}
-                      onClick={() => setActiveTypeFilter(tag)} 
-                      className={`px-4 py-1.5 rounded-full font-label-md text-xs transition-all active-scale ${activeTypeFilter === tag ? 'bg-primary text-white border border-primary' : 'border border-outline text-on-surface hover:bg-surface-container-high'}`}
-                    >
-                      {tag}
-                    </button>
-                  ))}
+                  {getMilestoneTags().map(tag => {
+                    const isActive = activeTypeFilter === tag;
+                    return (
+                      <button 
+                        key={tag}
+                        onClick={() => setActiveTypeFilter(tag)} 
+                        className={`px-4 py-1.5 rounded-full font-label-md text-xs transition-all active-scale border transition-colors`}
+                        style={scrapbookMode ? {
+                          backgroundColor: isActive ? catStyle.badgeBg : catStyle.bg,
+                          color: isActive ? catStyle.badgeText : catStyle.text,
+                          borderColor: catStyle.border
+                        } : {
+                          backgroundColor: isActive ? '#00482f' : 'transparent',
+                          color: isActive ? '#ffffff' : '#6f7a72',
+                          borderColor: isActive ? '#00482f' : '#6f7a72'
+                        }}
+                      >
+                        {tag}
+                      </button>
+                    );
+                  })}
                 </div>
 
                 {/* Sort & View Controls */}
@@ -491,53 +615,114 @@ export default function ProjectDetailPage({ params }) {
                       onClick={() => openPostModal(m)}
                       className={`group cursor-pointer overflow-hidden rounded-xl text-left w-full transition-all duration-300 hover:shadow-lg press-active scrapbook-card flex flex-col justify-between ${
                         isNoteLayout 
-                          ? 'bg-[#faf6ee] border-l-4 border-l-secondary border-t border-r border-b border-outline-variant p-6 scrapbook-notepad-card min-h-[320px]' 
-                          : 'bg-surface-container-lowest border border-outline-variant hover:border-primary-container scrapbook-photo-card min-h-[320px]'
+                          ? 'border-l-4 border-t border-r border-b p-6 scrapbook-notepad-card min-h-[320px]' 
+                          : 'border hover:border-primary-container scrapbook-photo-card min-h-[320px]'
                       }`}
+                      style={scrapbookMode ? { 
+                        backgroundColor: catStyle.bg, 
+                        borderColor: catStyle.border,
+                        borderLeftColor: isNoteLayout ? catStyle.border : undefined
+                      } : {
+                        backgroundColor: isNoteLayout ? '#faf6ee' : '#ffffff',
+                        borderColor: isNoteLayout ? '#bec9c0' : '#bec9c0',
+                        borderLeftColor: isNoteLayout ? '#006c44' : undefined
+                      }}
                     >
                       {isNoteLayout ? (
                         // Notepad card
                         <div className="flex flex-col justify-between h-full flex-grow">
-                          <div>
-                            <div className="flex justify-between items-center mb-4">
-                              <span className="bg-[#faf6ee] text-[#006c47] border border-[#006c47]/30 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">{typeVal}</span>
-                              <div className="flex items-center gap-1 text-[11px] text-outline font-semibold">
+                          <div className="w-full">
+                            <div className="flex justify-between items-center mb-4 w-full">
+                              <span 
+                                className="border px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider"
+                                style={scrapbookMode ? { backgroundColor: catStyle.badgeBg, color: catStyle.badgeText, borderColor: `${catStyle.border}80` } : { backgroundColor: '#faf6ee', color: '#006c47', borderColor: '#006c4730' }}
+                              >
+                                {typeVal}
+                              </span>
+                              <div 
+                                className="flex items-center gap-1 text-[11px] text-outline font-semibold"
+                                style={scrapbookMode ? { color: catStyle.text, opacity: 0.8 } : {}}
+                              >
                                 <span className="material-symbols-outlined text-base">{iconName}</span>
                                 <span>{labelVal}</span>
                               </div>
                             </div>
-                            <h3 className="font-headline-serif text-lg text-primary font-bold mb-2 group-hover:text-primary-container transition-colors leading-tight">{m.title}</h3>
+                            <h3 
+                              className="font-headline-serif text-lg text-primary font-bold mb-2 group-hover:text-primary-container transition-colors leading-tight"
+                              style={scrapbookMode ? { color: catStyle.text } : {}}
+                            >
+                              {m.title}
+                            </h3>
                             <div 
                               className="font-body-md text-sm text-on-surface-variant leading-relaxed mb-4 line-clamp-4 wordpress-content"
                               dangerouslySetInnerHTML={{ __html: m.content }}
                             />
                           </div>
-                          <div className="pt-3 border-t border-ceramic flex justify-between items-center text-xs text-outline mt-auto w-full">
-                            <span className="font-semibold">{dateStr}</span>
-                            <span className="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                          <div 
+                            className="pt-3 border-t border-ceramic flex justify-between items-center text-xs text-outline mt-auto w-full"
+                            style={scrapbookMode ? { borderColor: `${catStyle.border}50` } : {}}
+                          >
+                            <span 
+                              className="font-semibold"
+                              style={scrapbookMode ? { color: catStyle.text, opacity: 0.8 } : {}}
+                            >
+                              {dateStr}
+                            </span>
+                            <span 
+                              className="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform"
+                              style={scrapbookMode ? { color: catStyle.text } : {}}
+                            >
+                              arrow_forward
+                            </span>
                           </div>
                         </div>
                       ) : (
                         // Photo card
-                        <div className="flex flex-col justify-between h-full flex-grow">
-                          <div>
-                            <div className="aspect-video relative overflow-hidden border-b border-ceramic">
+                        <div className="flex flex-col justify-between h-full flex-grow w-full">
+                          <div className="w-full">
+                            <div className="aspect-video relative overflow-hidden border-b border-ceramic w-full" style={scrapbookMode ? { borderColor: `${catStyle.border}40` } : {}}>
                               <img className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src={m.featuredImage?.node?.sourceUrl} alt={m.title}/>
-                              <div className="absolute top-4 left-4 bg-primary-container text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">{typeVal}</div>
+                              <div 
+                                className="absolute top-4 left-4 text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
+                                style={scrapbookMode ? { backgroundColor: catStyle.badgeBg, color: catStyle.badgeText } : { backgroundColor: '#006241' }}
+                              >
+                                {typeVal}
+                              </div>
                             </div>
                             <div className="p-5">
-                              <span className="font-label-md text-secondary opacity-70 text-xs">{dateStr}</span>
-                              <h3 className="font-headline-md text-headline-md text-on-surface mt-2 group-hover:text-primary-container transition-colors text-xl font-bold line-clamp-1">{m.title}</h3>
+                              <span 
+                                className="font-label-md text-secondary opacity-70 text-xs"
+                                style={scrapbookMode ? { color: catStyle.text, opacity: 0.8 } : {}}
+                              >
+                                {dateStr}
+                              </span>
+                              <h3 
+                                className="font-headline-md text-headline-md text-on-surface mt-2 group-hover:text-primary-container transition-colors text-xl font-bold line-clamp-1"
+                                style={scrapbookMode ? { color: catStyle.text } : {}}
+                              >
+                                {m.title}
+                              </h3>
                               <p className="font-body-md text-body-md text-on-surface-variant mt-2 line-clamp-2 leading-relaxed">{stripHtml(m.content)}</p>
                             </div>
                           </div>
-                          <div className="p-5 pt-0 mt-auto">
-                            <div className="pt-4 border-t border-ceramic flex justify-between items-center">
-                              <span className="font-label-md text-gold flex items-center gap-1 text-sm font-semibold">
+                          <div className="p-5 pt-0 mt-auto w-full">
+                            <div 
+                              className="pt-4 border-t border-ceramic flex justify-between items-center w-full"
+                              style={scrapbookMode ? { borderColor: `${catStyle.border}40` } : {}}
+                            >
+                              <span 
+                                className="font-label-md text-gold flex items-center gap-1 text-sm font-semibold"
+                                style={scrapbookMode ? { color: catStyle.text } : {}}
+                              >
                                 <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>{iconName}</span>
                                 {labelVal}
                               </span>
-                              <span className="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                              <span 
+                                className="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform"
+                                style={scrapbookMode ? { color: catStyle.text } : {}}
+                              >
+                                arrow_forward
+                              </span>
                             </div>
                           </div>
                         </div>

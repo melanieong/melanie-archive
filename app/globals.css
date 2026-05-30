@@ -78,9 +78,18 @@
 
 /* TACTILE SCRAPBOOK THEME OVERLAYS */
 
+/* 0. Dotted Notebook Background across the shell in scrapbook mode */
+.scrapbook-mode,
+.scrapbook-mode aside,
+.scrapbook-mode main {
+    background-color: #f6f3eb !important; /* Warm ivory notebook paper */
+    background-image: radial-gradient(#d5d2c8 1.2px, transparent 1.2px) !important;
+    background-size: 20px 20px !important;
+}
+
 /* 1. Slight paper card rotations on masonry grid */
 .scrapbook-mode .scrapbook-card {
-    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease, border-color 0.3s ease, background-color 0.3s ease;
 }
 
 .scrapbook-mode .scrapbook-card:nth-child(2n) {
@@ -123,9 +132,8 @@
     pointer-events: none;
 }
 
-/* 3. Subtle Graph Paper Grid Lines on Notepad Cards */
+/* 3. Subtle Graph Paper Grid Lines on Notepad Cards (Color is dynamic) */
 .scrapbook-mode .scrapbook-notepad-card {
-    background-color: #faf6ee !important;
     background-image: 
         linear-gradient(rgba(0, 108, 68, 0.02) 1px, transparent 1px),
         linear-gradient(90deg, rgba(0, 108, 68, 0.02) 1px, transparent 1px) !important;

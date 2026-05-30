@@ -4,6 +4,112 @@ import { useState, useEffect } from 'react';
 import Link from 'next/link';
 import { fetchWordPressPosts } from '../lib/wordpress';
 
+const categoryColorMap = {
+  'coding': {
+    bg: '#eaf4ee',      // Soft Matcha Green
+    border: '#bcdba8',
+    text: '#123f24',
+    badgeBg: '#bcdba8',
+    badgeText: '#123f24'
+  },
+  'dev': {
+    bg: '#eaf4ee',
+    border: '#bcdba8',
+    text: '#123f24',
+    badgeBg: '#bcdba8',
+    badgeText: '#123f24'
+  },
+  'design': {
+    bg: '#fdf0ea',      // Warm Terracotta / Peach
+    border: '#f6bba8',
+    text: '#5c2c1e',
+    badgeBg: '#f6bba8',
+    badgeText: '#5c2c1e'
+  },
+  'creative': {
+    bg: '#fdf0ea',
+    border: '#f6bba8',
+    text: '#5c2c1e',
+    badgeBg: '#f6bba8',
+    badgeText: '#5c2c1e'
+  },
+  'writing': {
+    bg: '#faf3fc',      // Soft Lavender
+    border: '#d4beea',
+    text: '#4a154b',
+    badgeBg: '#d4beea',
+    badgeText: '#4a154b'
+  },
+  'archive': {
+    bg: '#faf3fc',
+    border: '#d4beea',
+    text: '#4a154b',
+    badgeBg: '#d4beea',
+    badgeText: '#4a154b'
+  },
+  'featured': {
+    bg: '#fdfae6',      // Chalky Mustard
+    border: '#f4db96',
+    text: '#524317',
+    badgeBg: '#f4db96',
+    badgeText: '#524317'
+  },
+  'music': {
+    bg: '#e6f0fa',      // Soft Blue
+    border: '#b3d2ed',
+    text: '#1b3c59',
+    badgeBg: '#b3d2ed',
+    badgeText: '#1b3c59'
+  },
+  'photography': {
+    bg: '#eafcf6',      // Muted Sage Teal
+    border: '#9bd6bd',
+    text: '#124c32',
+    badgeBg: '#9bd6bd',
+    badgeText: '#124c32'
+  }
+};
+
+export function getCategoryStyle(categoryName) {
+  if (!categoryName) {
+    return {
+      bg: '#faf6ee', // Default notepad warm cream
+      border: '#c4c7c7',
+      text: '#00482f',
+      badgeBg: '#d4e9e2',
+      badgeText: '#00482f'
+    };
+  }
+
+  const nameLower = categoryName.toLowerCase().trim();
+  if (categoryColorMap[nameLower]) {
+    return categoryColorMap[nameLower];
+  }
+
+  for (const key in categoryColorMap) {
+    if (nameLower.includes(key)) {
+      return categoryColorMap[key];
+    }
+  }
+
+  // Hash-based fallback
+  const colors = [
+    { bg: '#fdf0ea', border: '#f6bba8', text: '#5c2c1e', badgeBg: '#f6bba8', badgeText: '#5c2c1e' }, // Peach
+    { bg: '#eaf4ee', border: '#bcdba8', text: '#123f24', badgeBg: '#bcdba8', badgeText: '#123f24' }, // Matcha
+    { bg: '#faf3fc', border: '#d4beea', text: '#4a154b', badgeBg: '#d4beea', badgeText: '#4a154b' }, // Lavender
+    { bg: '#e6f0fa', border: '#b3d2ed', text: '#1b3c59', badgeBg: '#b3d2ed', badgeText: '#1b3c59' }, // Blue
+    { bg: '#eafcf6', border: '#9bd6bd', text: '#124c32', badgeBg: '#9bd6bd', badgeText: '#124c32' }, // Teal
+    { bg: '#fdfae6', border: '#f4db96', text: '#524317', badgeBg: '#f4db96', badgeText: '#524317' }  // Yellow
+  ];
+
+  let hash = 0;
+  for (let i = 0; i < categoryName.length; i++) {
+    hash = categoryName.charCodeAt(i) + ((hash << 5) - hash);
+  }
+  const index = Math.abs(hash) % colors.length;
+  return colors[index];
+}
+
 export default function HomePage() {
   const [posts, setPosts] = useState([]);
   const [loading, setLoading] = useState(true);
@@ -373,19 +479,37 @@ export default function HomePage() {
                     <span className="font-label-md text-outline uppercase tracking-wider mr-2 text-xs">Type:</span>
                     <button 
                       onClick={() => setActiveTypeFilter('All')} 
-                      className={`px-4 py-1.5 rounded-full font-label-md text-xs transition-all active-scale ${activeTypeFilter === 'All' ? 'bg-primary text-white border border-primary' : 'border border-outline text-on-surface hover:bg-surface-container-high'}`}
+                      className={`px-4 py-1.5 rounded-full font-label-md text-xs transition-all active-scale border transition-colors ${activeTypeFilter === 'All' ? 'bg-primary text-white border-primary' : 'border-outline text-on-surface hover:bg-surface-container-high'}`}
+                      style={scrapbookMode ? {
+                        backgroundColor: activeTypeFilter === 'All' ? '#00482f' : '#f5f2eb',
+                        color: activeTypeFilter === 'All' ? '#ffffff' : '#00482f',
+                        borderColor: '#00482f'
+                      } : {}}
                     >
                       All Types
                     </button>
-                    {getEntryCategories().map(cat => (
-                      <button 
-                        key={cat}
-                        onClick={() => setActiveTypeFilter(cat)} 
-                        className={`px-4 py-1.5 rounded-full font-label-md text-xs transition-all active-scale ${activeTypeFilter === cat ? 'bg-primary text-white border border-primary' : 'border border-outline text-on-surface hover:bg-surface-container-high'}`}
-                      >
-                        {cat}
-                      </button>
-                    ))}
+                    {getEntryCategories().map(cat => {
+                      const catStyle = getCategoryStyle(cat);
+                      const isActive = activeTypeFilter === cat;
+                      return (
+                        <button 
+                          key={cat}
+                          onClick={() => setActiveTypeFilter(cat)} 
+                          className={`px-4 py-1.5 rounded-full font-label-md text-xs transition-all active-scale border transition-colors`}
+                          style={scrapbookMode ? {
+                            backgroundColor: isActive ? catStyle.badgeBg : catStyle.bg,
+                            color: isActive ? catStyle.badgeText : catStyle.text,
+                            borderColor: catStyle.border
+                          } : {
+                            backgroundColor: isActive ? '#00482f' : 'transparent',
+                            color: isActive ? '#ffffff' : '#6f7a72',
+                            borderColor: isActive ? '#00482f' : '#6f7a72'
+                          }}
+                        >
+                          {cat}
+                        </button>
+                      );
+                    })}
                   </div>
 
                   {/* Sort Dropdown */}
@@ -420,32 +544,54 @@ export default function HomePage() {
                 <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
                   {filteredProjects.map((p) => {
                     const statusText = p.status || 'Ongoing';
+                    const catStyle = getCategoryStyle(p.name);
                     
                     return (
                       <div 
                         key={p.slug} 
                         className="bg-surface rounded-xl card-whisper group cursor-pointer overflow-hidden transition-all duration-300 hover:-translate-y-1 hover:scale-[1.02] active-scale w-full text-left scrapbook-card scrapbook-photo-card aspect-square border border-ceramic p-6 flex flex-col justify-between"
+                        style={scrapbookMode ? { backgroundColor: catStyle.bg, borderColor: catStyle.border } : {}}
                       >
                         <Link href={`/project/${p.slug}`} className="flex flex-col justify-between h-full w-full">
                           <div>
                             <div className="flex justify-between items-center mb-4">
-                              <span className="bg-green-light text-primary px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm">
+                              <span 
+                                className="px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider shadow-sm"
+                                style={scrapbookMode ? { backgroundColor: catStyle.badgeBg, color: catStyle.badgeText } : { backgroundColor: '#d4e9e2', color: '#00482f' }}
+                              >
                                 Journey
                               </span>
-                              <span className="font-label-md text-xs text-outline font-semibold">
+                              <span 
+                                className="font-label-md text-xs text-outline font-semibold"
+                                style={scrapbookMode ? { color: catStyle.text, opacity: 0.8 } : {}}
+                              >
                                 {statusText}
                               </span>
                             </div>
-                            <h3 className="font-headline-serif text-3xl text-primary font-bold leading-tight group-hover:text-primary-container transition-colors line-clamp-3 mt-4">
+                            <h3 
+                              className="font-headline-serif text-3xl text-primary font-bold leading-tight group-hover:text-primary-container transition-colors line-clamp-3 mt-4"
+                              style={scrapbookMode ? { color: catStyle.text } : {}}
+                            >
                               {p.name}
                             </h3>
                           </div>
                           
-                          <div className="pt-4 border-t border-ceramic flex justify-between items-center w-full">
-                            <span className="font-label-md text-xs uppercase tracking-wider text-secondary font-bold">
+                          <div 
+                            className="pt-4 border-t border-ceramic flex justify-between items-center w-full"
+                            style={scrapbookMode ? { borderColor: `${catStyle.border}50` } : {}}
+                          >
+                            <span 
+                              className="font-label-md text-xs uppercase tracking-wider text-secondary font-bold"
+                              style={scrapbookMode ? { color: catStyle.text, opacity: 0.8 } : {}}
+                            >
                               {p.posts.length} {p.posts.length === 1 ? 'Entry' : 'Entries'}
                             </span>
-                            <span className="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                            <span 
+                              className="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform"
+                              style={scrapbookMode ? { color: catStyle.text } : {}}
+                            >
+                              arrow_forward
+                            </span>
                           </div>
                         </Link>
                       </div>
@@ -468,6 +614,7 @@ export default function HomePage() {
                     const labelVal = m.tags?.nodes?.[0]?.name || 'Milestone';
                     
                     const isNoteLayout = !m.featuredImage?.node?.sourceUrl;
+                    const catStyle = getCategoryStyle(typeVal);
 
                     return (
                       <article 
@@ -475,54 +622,115 @@ export default function HomePage() {
                         onClick={() => openPostModal(m)}
                         className={`group cursor-pointer overflow-hidden rounded-xl text-left w-full transition-all duration-300 hover:shadow-lg press-active scrapbook-card flex flex-col justify-between ${
                           isNoteLayout 
-                            ? 'bg-[#faf6ee] border-l-4 border-l-secondary border-t border-r border-b border-outline-variant p-6 scrapbook-notepad-card min-h-[320px]' 
-                            : 'bg-surface-container-lowest border border-outline-variant hover:border-primary-container scrapbook-photo-card min-h-[320px]'
+                            ? 'border-l-4 border-t border-r border-b p-6 scrapbook-notepad-card min-h-[320px]' 
+                            : 'border hover:border-primary-container scrapbook-photo-card min-h-[320px]'
                         }`}
+                        style={scrapbookMode ? { 
+                          backgroundColor: catStyle.bg, 
+                          borderColor: catStyle.border,
+                          borderLeftColor: isNoteLayout ? catStyle.border : undefined
+                        } : {
+                          backgroundColor: isNoteLayout ? '#faf6ee' : '#ffffff',
+                          borderColor: isNoteLayout ? '#bec9c0' : '#bec9c0',
+                          borderLeftColor: isNoteLayout ? '#006c44' : undefined
+                        }}
                       >
 
                         {isNoteLayout ? (
                           // Notepad card
                           <div className="flex flex-col justify-between h-full flex-grow">
-                            <div>
-                              <div className="flex justify-between items-center mb-4">
-                                <span className="bg-[#faf6ee] text-[#006c47] border border-[#006c47]/30 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">{typeVal}</span>
-                                <div className="flex items-center gap-1 text-[11px] text-outline font-semibold">
+                            <div className="w-full">
+                              <div className="flex justify-between items-center mb-4 w-full">
+                                <span 
+                                  className="border px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider"
+                                  style={scrapbookMode ? { backgroundColor: catStyle.badgeBg, color: catStyle.badgeText, borderColor: `${catStyle.border}80` } : { backgroundColor: '#faf6ee', color: '#006c47', borderColor: '#006c4730' }}
+                                >
+                                  {typeVal}
+                                </span>
+                                <div 
+                                  className="flex items-center gap-1 text-[11px] text-outline font-semibold"
+                                  style={scrapbookMode ? { color: catStyle.text, opacity: 0.8 } : {}}
+                                >
                                   <span className="material-symbols-outlined text-base">{iconName}</span>
                                   <span>{labelVal}</span>
                                 </div>
                               </div>
-                              <h3 className="font-headline-serif text-lg text-primary font-bold mb-2 group-hover:text-primary-container transition-colors leading-tight">{m.title}</h3>
+                              <h3 
+                                className="font-headline-serif text-lg text-primary font-bold mb-2 group-hover:text-primary-container transition-colors leading-tight"
+                                style={scrapbookMode ? { color: catStyle.text } : {}}
+                              >
+                                {m.title}
+                              </h3>
                               <div 
                                 className="font-body-md text-sm text-on-surface-variant leading-relaxed mb-4 line-clamp-4 wordpress-content"
                                 dangerouslySetInnerHTML={{ __html: m.content }}
                               />
                             </div>
-                            <div className="pt-3 border-t border-ceramic flex justify-between items-center text-xs text-outline mt-auto w-full">
-                              <span className="font-semibold">{dateStr}</span>
-                              <span className="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                            <div 
+                              className="pt-3 border-t border-ceramic flex justify-between items-center text-xs text-outline mt-auto w-full"
+                              style={scrapbookMode ? { borderColor: `${catStyle.border}50` } : {}}
+                            >
+                              <span 
+                                className="font-semibold"
+                                style={scrapbookMode ? { color: catStyle.text, opacity: 0.8 } : {}}
+                              >
+                                {dateStr}
+                              </span>
+                              <span 
+                                className="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform"
+                                style={scrapbookMode ? { color: catStyle.text } : {}}
+                              >
+                                arrow_forward
+                              </span>
                             </div>
                           </div>
                         ) : (
                           // Photo card
-                          <div className="flex flex-col justify-between h-full flex-grow">
-                            <div>
-                              <div className="aspect-video relative overflow-hidden border-b border-ceramic">
+                          <div className="flex flex-col justify-between h-full flex-grow w-full">
+                            <div className="w-full">
+                              <div className="aspect-video relative overflow-hidden border-b border-ceramic w-full" style={scrapbookMode ? { borderColor: `${catStyle.border}40` } : {}}>
                                 <img className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src={m.featuredImage?.node?.sourceUrl} alt={m.title}/>
-                                <div className="absolute top-4 left-4 bg-primary-container text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">{typeVal}</div>
+                                <div 
+                                  className="absolute top-4 left-4 text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider"
+                                  style={scrapbookMode ? { backgroundColor: catStyle.badgeBg, color: catStyle.badgeText } : { backgroundColor: '#006241' }}
+                                >
+                                  {typeVal}
+                                </div>
                               </div>
                               <div className="p-5">
-                                <span className="font-label-md text-secondary opacity-70 text-xs">{dateStr}</span>
-                                <h3 className="font-headline-md text-headline-md text-on-surface mt-2 group-hover:text-primary-container transition-colors text-xl font-bold line-clamp-1">{m.title}</h3>
+                                <span 
+                                  className="font-label-md text-secondary opacity-70 text-xs"
+                                  style={scrapbookMode ? { color: catStyle.text, opacity: 0.8 } : {}}
+                                >
+                                  {dateStr}
+                                </span>
+                                <h3 
+                                  className="font-headline-md text-headline-md text-on-surface mt-2 group-hover:text-primary-container transition-colors text-xl font-bold line-clamp-1"
+                                  style={scrapbookMode ? { color: catStyle.text } : {}}
+                                >
+                                  {m.title}
+                                </h3>
                                 <p className="font-body-md text-body-md text-on-surface-variant mt-2 line-clamp-2 leading-relaxed">{stripHtml(m.content)}</p>
                               </div>
                             </div>
-                            <div className="p-5 pt-0 mt-auto">
-                              <div className="pt-4 border-t border-ceramic flex justify-between items-center">
-                                <span className="font-label-md text-gold flex items-center gap-1 text-sm font-semibold">
+                            <div className="p-5 pt-0 mt-auto w-full">
+                              <div 
+                                className="pt-4 border-t border-ceramic flex justify-between items-center w-full"
+                                style={scrapbookMode ? { borderColor: `${catStyle.border}40` } : {}}
+                              >
+                                <span 
+                                  className="font-label-md text-gold flex items-center gap-1 text-sm font-semibold"
+                                  style={scrapbookMode ? { color: catStyle.text } : {}}
+                                >
                                   <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>{iconName}</span>
                                   {labelVal}
                                 </span>
-                                <span className="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                                <span 
+                                  className="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform"
+                                  style={scrapbookMode ? { color: catStyle.text } : {}}
+                                >
+                                  arrow_forward
+                                </span>
                               </div>
                             </div>
                           </div>
