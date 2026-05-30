@@ -250,20 +250,26 @@ export default function HomePage() {
             <span className="material-symbols-outlined">settings</span>
             <span className="font-label-md text-label-md">WP Admin</span>
           </a>
-          <button 
-            onClick={toggleScrapbookMode} 
-            className="flex items-center gap-space-3 py-space-2 rounded-lg pl-4 hover:bg-ceramic transition-colors active-scale text-left w-full text-on-surface-variant font-semibold"
-          >
-            <span 
-              className={`material-symbols-outlined transition-all ${scrapbookMode ? 'text-gold' : ''}`}
-              style={{ fontVariationSettings: scrapbookMode ? "'FILL' 1" : "'FILL' 0" }}
+          <div className="flex items-center justify-between py-space-2 px-space-2 pl-4 rounded-lg hover:bg-ceramic transition-colors w-full text-on-surface-variant font-semibold select-none">
+            <div className="flex items-center gap-space-3">
+              <span 
+                className={`material-symbols-outlined transition-all ${scrapbookMode ? 'text-gold' : ''}`}
+                style={{ fontVariationSettings: scrapbookMode ? "'FILL' 1" : "'FILL' 0" }}
+              >
+                auto_stories
+              </span>
+              <span className="font-label-md text-label-md">Tactile Notebook</span>
+            </div>
+            <button 
+              onClick={toggleScrapbookMode}
+              className={`relative inline-flex h-5 w-9 items-center rounded-full transition-all focus:outline-none ml-auto border border-outline-variant/60 active-scale ${scrapbookMode ? 'bg-[#006c44]' : 'bg-[#bec9c0]/30'}`}
+              aria-label="Toggle scrapbook mode"
             >
-              auto_stories
-            </span>
-            <span className="font-label-md text-label-md">
-              {scrapbookMode ? 'Tactile Notebook' : 'Clean Modern'}
-            </span>
-          </button>
+              <span 
+                className={`inline-block h-3.5 w-3.5 transform rounded-full bg-white shadow-sm transition-transform ${scrapbookMode ? 'translate-x-4' : 'translate-x-0.5'}`}
+              />
+            </button>
+          </div>
         </nav>
 
         
@@ -501,7 +507,7 @@ export default function HomePage() {
                             </div>
                             <h3 className="font-headline-serif text-lg text-primary font-bold mb-2 group-hover:text-primary-container transition-colors leading-tight">{m.title}</h3>
                             <div 
-                              className="font-body-md text-sm text-on-surface-variant leading-relaxed mb-4 line-clamp-4"
+                              className="font-body-md text-sm text-on-surface-variant leading-relaxed mb-4 line-clamp-4 wordpress-content"
                               dangerouslySetInnerHTML={{ __html: m.content }}
                             />
                             <div className="pt-3 border-t border-ceramic flex justify-between items-center text-xs text-outline">
@@ -627,7 +633,7 @@ export default function HomePage() {
               <h3 className="font-headline-serif text-3xl text-primary font-bold mb-4">{activeModalPost.title}</h3>
               
               <div 
-                className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed mb-6 whitespace-pre-wrap"
+                className="font-body-lg text-body-lg text-on-surface-variant leading-relaxed mb-6 wordpress-content"
                 dangerouslySetInnerHTML={{ __html: activeModalPost.content }}
               />
               
