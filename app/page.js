@@ -473,47 +473,51 @@ export default function HomePage() {
                       <article 
                         key={m.id}
                         onClick={() => openPostModal(m)}
-                        className={`group cursor-pointer overflow-hidden rounded-xl text-left w-full transition-all duration-300 hover:shadow-lg press-active scrapbook-card ${
+                        className={`group cursor-pointer overflow-hidden rounded-xl text-left w-full transition-all duration-300 hover:shadow-lg press-active scrapbook-card flex flex-col justify-between ${
                           isNoteLayout 
-                            ? 'bg-[#faf6ee] border-l-4 border-l-secondary border-t border-r border-b border-outline-variant p-6 scrapbook-notepad-card' 
-                            : 'bg-surface-container-lowest border border-outline-variant hover:border-primary-container scrapbook-photo-card'
+                            ? 'bg-[#faf6ee] border-l-4 border-l-secondary border-t border-r border-b border-outline-variant p-6 scrapbook-notepad-card min-h-[320px]' 
+                            : 'bg-surface-container-lowest border border-outline-variant hover:border-primary-container scrapbook-photo-card min-h-[320px]'
                         }`}
                       >
 
                         {isNoteLayout ? (
                           // Notepad card
-                          <div>
-                            <div className="flex justify-between items-center mb-4">
-                              <span className="bg-[#faf6ee] text-[#006c47] border border-[#006c47]/30 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">{typeVal}</span>
-                              <div className="flex items-center gap-1 text-[11px] text-outline font-semibold">
-                                <span className="material-symbols-outlined text-base">{iconName}</span>
-                                <span>{labelVal}</span>
+                          <div className="flex flex-col justify-between h-full flex-grow">
+                            <div>
+                              <div className="flex justify-between items-center mb-4">
+                                <span className="bg-[#faf6ee] text-[#006c47] border border-[#006c47]/30 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">{typeVal}</span>
+                                <div className="flex items-center gap-1 text-[11px] text-outline font-semibold">
+                                  <span className="material-symbols-outlined text-base">{iconName}</span>
+                                  <span>{labelVal}</span>
+                                </div>
                               </div>
+                              <h3 className="font-headline-serif text-lg text-primary font-bold mb-2 group-hover:text-primary-container transition-colors leading-tight">{m.title}</h3>
+                              <div 
+                                className="font-body-md text-sm text-on-surface-variant leading-relaxed mb-4 line-clamp-4 wordpress-content"
+                                dangerouslySetInnerHTML={{ __html: m.content }}
+                              />
                             </div>
-                            <h3 className="font-headline-serif text-lg text-primary font-bold mb-2 group-hover:text-primary-container transition-colors leading-tight">{m.title}</h3>
-                            <div 
-                              className="font-body-md text-sm text-on-surface-variant leading-relaxed mb-4 line-clamp-4 wordpress-content"
-                              dangerouslySetInnerHTML={{ __html: m.content }}
-                            />
-                            <div className="pt-3 border-t border-ceramic flex justify-between items-center text-xs text-outline">
+                            <div className="pt-3 border-t border-ceramic flex justify-between items-center text-xs text-outline mt-auto w-full">
                               <span className="font-semibold">{dateStr}</span>
                               <span className="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform">arrow_forward</span>
                             </div>
                           </div>
                         ) : (
                           // Photo card
-                          <div className="flex flex-col justify-between h-full">
-                            <div className="aspect-video relative overflow-hidden border-b border-ceramic">
-                              <img className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src={m.featuredImage?.node?.sourceUrl} alt={m.title}/>
-                              <div className="absolute top-4 left-4 bg-primary-container text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">{typeVal}</div>
-                            </div>
-                            <div className="p-5 flex-grow flex flex-col justify-between">
-                              <div>
+                          <div className="flex flex-col justify-between h-full flex-grow">
+                            <div>
+                              <div className="aspect-video relative overflow-hidden border-b border-ceramic">
+                                <img className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src={m.featuredImage?.node?.sourceUrl} alt={m.title}/>
+                                <div className="absolute top-4 left-4 bg-primary-container text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">{typeVal}</div>
+                              </div>
+                              <div className="p-5">
                                 <span className="font-label-md text-secondary opacity-70 text-xs">{dateStr}</span>
                                 <h3 className="font-headline-md text-headline-md text-on-surface mt-2 group-hover:text-primary-container transition-colors text-xl font-bold line-clamp-1">{m.title}</h3>
                                 <p className="font-body-md text-body-md text-on-surface-variant mt-2 line-clamp-2 leading-relaxed">{stripHtml(m.content)}</p>
                               </div>
-                              <div className="mt-6 pt-4 border-t border-ceramic flex justify-between items-center">
+                            </div>
+                            <div className="p-5 pt-0 mt-auto">
+                              <div className="pt-4 border-t border-ceramic flex justify-between items-center">
                                 <span className="font-label-md text-gold flex items-center gap-1 text-sm font-semibold">
                                   <span className="material-symbols-outlined text-[18px]" style={{ fontVariationSettings: "'FILL' 1" }}>{iconName}</span>
                                   {labelVal}
@@ -627,13 +631,6 @@ export default function HomePage() {
                   <span className="material-symbols-outlined text-[18px]">star</span>
                   {activeModalPost.tags?.nodes?.[1]?.name || 'Archived Spec'}
                 </span>
-                <button 
-                  onClick={() => window.open('http://melanie-archive-backend.local/wp-admin/', '_blank')}
-                  className="bg-ceramic hover:bg-[#dcdad5] text-primary px-4 py-2 rounded-full font-bold text-xs flex items-center gap-1.5 active-scale transition-colors"
-                >
-                  <span className="material-symbols-outlined text-[16px]">edit</span>
-                  Edit in WP
-                </button>
               </div>
             </div>
           </div>
