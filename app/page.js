@@ -13,6 +13,9 @@ export default function HomePage() {
   const [currentSort, setCurrentSort] = useState('date-desc');
   const [searchQuery, setSearchQuery] = useState('');
   
+  // Scrapbook Theme Toggle
+  const [scrapbookMode, setScrapbookMode] = useState(false);
+
   // Manifesto Slider State
   const [manifestoOpen, setManifestoOpen] = useState(false);
   const [manifestoOpacity, setManifestoOpacity] = useState(false);
@@ -30,14 +33,26 @@ export default function HomePage() {
       const wpPosts = await fetchWordPressPosts();
       setPosts(wpPosts);
       setLoading(false);
+
+      const storedTheme = localStorage.getItem('mel_scrapbook_theme');
+      if (storedTheme === 'true') {
+        setScrapbookMode(true);
+      }
     }
     loadData();
   }, []);
+
+  const toggleScrapbookMode = () => {
+    const nextMode = !scrapbookMode;
+    setScrapbookMode(nextMode);
+    localStorage.setItem('mel_scrapbook_theme', String(nextMode));
+  };
 
   // Format date helper
   const formatDate = (dateStr) => {
     if (!dateStr) return 'Jan 12, 2026';
     const date = new Date(dateStr);
+
     return date.toLocaleDateString('en-US', {
       month: 'short',
       day: '2-digit',
@@ -166,7 +181,7 @@ export default function HomePage() {
   const filteredEntries = getFilteredEntries();
 
   return (
-    <div className="flex flex-col md:flex-row h-screen overflow-hidden page-fade-in font-body-md bg-canvas-warm">
+    <div className={`flex flex-col md:flex-row h-screen overflow-hidden page-fade-in font-body-md bg-canvas-warm ${scrapbookMode ? 'scrapbook-mode' : ''}`}>
       
       {/* Persistent SideNavBar Shell */}
       <aside className="w-full md:w-64 h-auto md:h-screen bg-canvas-warm border-b md:border-r border-ceramic flex flex-col py-4 px-4 md:py-space-4 md:px-space-2 flex-shrink-0 overflow-y-auto custom-scrollbar z-50">
@@ -198,7 +213,22 @@ export default function HomePage() {
             <span className="material-symbols-outlined">settings</span>
             <span className="font-label-md text-label-md">WP Admin</span>
           </a>
+          <button 
+            onClick={toggleScrapbookMode} 
+            className="flex items-center gap-space-3 py-space-2 rounded-lg pl-4 hover:bg-ceramic transition-colors active-scale text-left w-full text-on-surface-variant font-semibold"
+          >
+            <span 
+              className={`material-symbols-outlined transition-all ${scrapbookMode ? 'text-gold' : ''}`}
+              style={{ fontVariationSettings: scrapbookMode ? "'FILL' 1" : "'FILL' 0" }}
+            >
+              auto_stories
+            </span>
+            <span className="font-label-md text-label-md">
+              {scrapbookMode ? 'Tactile Notebook' : 'Clean Modern'}
+            </span>
+          </button>
         </nav>
+
         
         {/* Bottom Actions & User Profile */}
         <div className={`${mobileMenuOpen ? 'flex' : 'hidden'} md:flex flex-col mt-auto w-full px-2 pt-4 border-t border-ceramic md:border-none`}>
@@ -225,7 +255,7 @@ export default function HomePage() {
           {/* Top Header Navigation */}
           <header className="flex justify-between items-center mb-space-3 mt-4 md:mt-0">
             <div>
-              <span className="font-script-touch text-script-touch text-secondary italic mb-2 block">Curated Collection</span>
+              <span className="font-script-touch text-script-touch text-secondary italic mb-2 block scrapbook-handwriting">Curated Collection</span>
               <h2 className="font-display-lg text-display-lg text-primary-container leading-tight">Learning Journeys &amp; Archives</h2>
             </div>
             <div className="flex items-center gap-space-4">
@@ -240,7 +270,7 @@ export default function HomePage() {
                 <span className="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline">search</span>
               </div>
               <button className="p-2 hover:bg-surface-container rounded-full transition-colors active-scale" onClick={() => alert('All backend messages synced successfully.')}>
-                <span class="material-symbols-outlined text-primary">notifications</span>
+                <span className="material-symbols-outlined text-primary">notifications</span>
               </button>
               <div className="flex items-center">
                 <a href="http://melanie-archive-backend.local/wp-login.php" target="_blank" rel="noopener noreferrer" className="p-2 hover:opacity-80 transition-opacity cursor-pointer text-secondary flex items-center justify-center" title="Sign In">
@@ -360,7 +390,7 @@ export default function HomePage() {
                     return (
                       <div 
                         key={p.id} 
-                        className="bg-surface rounded-xl card-whisper group cursor-pointer overflow-hidden transition-all duration-300 hover:-translate-y-1 active-scale w-full text-left"
+                        className="bg-surface rounded-xl card-whisper group cursor-pointer overflow-hidden transition-all duration-300 hover:-translate-y-1 active-scale w-full text-left scrapbook-card scrapbook-photo-card"
                       >
                         <Link href={`/project/${p.slug}`} className="block">
                           <div className="aspect-video relative overflow-hidden border-b border-ceramic">
@@ -415,12 +445,13 @@ export default function HomePage() {
                       <article 
                         key={m.id}
                         onClick={() => openPostModal(m)}
-                        className={`group cursor-pointer overflow-hidden rounded-xl text-left w-full transition-all duration-300 hover:shadow-lg press-active ${
+                        className={`group cursor-pointer overflow-hidden rounded-xl text-left w-full transition-all duration-300 hover:shadow-lg press-active scrapbook-card ${
                           isNoteLayout 
-                            ? 'bg-[#faf6ee] border-l-4 border-l-secondary border-t border-r border-b border-outline-variant p-6' 
-                            : 'bg-surface-container-lowest border border-outline-variant hover:border-primary-container'
+                            ? 'bg-[#faf6ee] border-l-4 border-l-secondary border-t border-r border-b border-outline-variant p-6 scrapbook-notepad-card' 
+                            : 'bg-surface-container-lowest border border-outline-variant hover:border-primary-container scrapbook-photo-card'
                         }`}
                       >
+
                         {isNoteLayout ? (
                           // Notepad card
                           <div>
@@ -506,7 +537,7 @@ export default function HomePage() {
             className={`absolute right-0 top-0 bottom-0 w-full max-w-md bg-canvas-warm p-8 flex flex-col justify-between shadow-2xl border-l border-ceramic transform transition-transform duration-300 ${manifestoOpacity ? 'translate-x-0' : 'translate-x-full'}`}
           >
             <div>
-              <div class="flex justify-between items-center mb-10">
+              <div className="flex justify-between items-center mb-10">
                 <span className="font-headline-md text-headline-md text-primary tracking-widest uppercase">MANIFESTO</span>
                 <button className="p-2 hover:bg-ceramic rounded-full active-scale" onClick={toggleManifesto}>
                   <span className="material-symbols-outlined">close</span>

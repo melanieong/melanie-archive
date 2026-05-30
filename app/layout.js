@@ -1,4 +1,4 @@
-import { Inter, Literata, Karla } from 'next/font/google';
+import { Inter, Literata, Karla, Caveat } from 'next/font/google';
 import './globals.css';
 
 const inter = Inter({
@@ -9,7 +9,6 @@ const inter = Inter({
 
 const literata = Literata({
   subsets: ['latin'],
-  variable: '--font-literata',
   weight: ['400', '600', '700'],
   style: ['normal', 'italic'],
   variable: '--font-literata',
@@ -22,6 +21,12 @@ const karla = Karla({
   display: 'swap',
 });
 
+const caveat = Caveat({
+  subsets: ['latin'],
+  variable: '--font-handwriting',
+  display: 'swap',
+});
+
 export const metadata = {
   title: "MELANIE'S ARCHIVE | Learning Journeys & Archives",
   description: "A digital workspace built with absolute intention, presenting dynamic portfolio projects and monographs.",
@@ -29,7 +34,7 @@ export const metadata = {
 
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" className={`light ${inter.variable} ${literata.variable} ${karla.variable}`}>
+    <html lang="en" className={`light ${inter.variable} ${literata.variable} ${karla.variable} ${caveat.variable}`}>
       <head>
         <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
       </head>
@@ -39,3 +44,4 @@ export default function RootLayout({ children }) {
     </html>
   );
 }
+

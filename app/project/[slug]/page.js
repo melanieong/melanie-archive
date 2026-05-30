@@ -22,6 +22,9 @@ export default function ProjectDetailPage({ params }) {
   const [modalOpen, setModalOpen] = useState(false);
   const [modalOpacity, setModalOpacity] = useState(false);
 
+  // Scrapbook Theme Toggle
+  const [scrapbookMode, setScrapbookMode] = useState(false);
+
   useEffect(() => {
     async function loadData() {
       const mainPost = await fetchWordPressPostBySlug(slug);
@@ -38,9 +41,20 @@ export default function ProjectDetailPage({ params }) {
       setRelatedMilestones(related.length > 0 ? related : allPosts.slice(0, 3));
       
       setLoading(false);
+
+      const storedTheme = localStorage.getItem('mel_scrapbook_theme');
+      if (storedTheme === 'true') {
+        setScrapbookMode(true);
+      }
     }
     loadData();
   }, [slug]);
+
+  const toggleScrapbookMode = () => {
+    const nextMode = !scrapbookMode;
+    setScrapbookMode(nextMode);
+    localStorage.setItem('mel_scrapbook_theme', String(nextMode));
+  };
 
   // Date formatting helper
   const formatDate = (dateStr) => {
@@ -151,7 +165,7 @@ export default function ProjectDetailPage({ params }) {
   const featuredImgUrl = post.featuredImage?.node?.sourceUrl || "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80";
 
   return (
-    <div className="flex flex-col md:flex-row h-screen overflow-hidden page-fade-in font-body-md bg-canvas-warm">
+    <div className={`flex flex-col md:flex-row h-screen overflow-hidden page-fade-in font-body-md bg-canvas-warm ${scrapbookMode ? 'scrapbook-mode' : ''}`}>
       
       {/* Persistent SideNavBar Shell */}
       <aside className="w-full md:w-64 h-auto md:h-screen bg-canvas-warm border-b md:border-r border-ceramic flex flex-col py-4 px-4 md:py-space-4 md:px-space-2 flex-shrink-0 overflow-y-auto custom-scrollbar z-50">
@@ -185,6 +199,20 @@ export default function ProjectDetailPage({ params }) {
             <span className="material-symbols-outlined">settings</span>
             <span className="font-label-md text-label-md">WP Admin</span>
           </a>
+          <button 
+            onClick={toggleScrapbookMode} 
+            className="flex items-center gap-space-3 py-space-2 rounded-lg pl-4 hover:bg-ceramic transition-colors active-scale text-left w-full text-on-surface-variant font-semibold"
+          >
+            <span 
+              className={`material-symbols-outlined transition-all ${scrapbookMode ? 'text-gold' : ''}`}
+              style={{ fontVariationSettings: scrapbookMode ? "'FILL' 1" : "'FILL' 0" }}
+            >
+              auto_stories
+            </span>
+            <span className="font-label-md text-label-md">
+              {scrapbookMode ? 'Tactile Notebook' : 'Clean Modern'}
+            </span>
+          </button>
         </nav>
         
         {/* Bottom Actions & User Profile */}
@@ -211,7 +239,7 @@ export default function ProjectDetailPage({ params }) {
         {/* Top Header Navigation */}
         <header className="flex justify-between items-center mb-space-3 w-full flex-shrink-0 mt-4 md:mt-0">
           <div>
-            <span className="font-script-touch text-script-touch text-secondary italic mb-2 block">Curated Collection</span>
+            <span className="font-script-touch text-script-touch text-secondary italic mb-2 block scrapbook-handwriting">Curated Collection</span>
             <h2 className="font-display-lg text-display-lg text-primary-container leading-tight">Learning Journeys &amp; Archives</h2>
           </div>
           <div className="flex items-center gap-space-4">
@@ -269,7 +297,7 @@ export default function ProjectDetailPage({ params }) {
               </div>
 
               {/* Hero Project Image Banner */}
-              <div className="w-full h-96 overflow-hidden rounded-xl mb-12 shadow-sm border border-ceramic">
+              <div className="w-full h-96 overflow-hidden rounded-xl mb-12 shadow-sm border border-ceramic scrapbook-photo-card">
                 <img className="w-full h-full object-cover" src={featuredImgUrl} alt={post.title}/>
               </div>
 
@@ -383,10 +411,10 @@ export default function ProjectDetailPage({ params }) {
                     <article 
                       key={m.id}
                       onClick={() => openPostModal(m)}
-                      className={`group cursor-pointer overflow-hidden rounded-xl text-left w-full transition-all duration-300 hover:shadow-lg press-active ${
+                      className={`group cursor-pointer overflow-hidden rounded-xl text-left w-full transition-all duration-300 hover:shadow-lg press-active scrapbook-card ${
                         isNoteLayout 
-                          ? 'bg-[#faf6ee] border-l-4 border-l-secondary border-t border-r border-b border-outline-variant p-6' 
-                          : 'bg-surface-container-lowest border border-outline-variant hover:border-primary-container'
+                          ? 'bg-[#faf6ee] border-l-4 border-l-secondary border-t border-r border-b border-outline-variant p-6 scrapbook-notepad-card' 
+                          : 'bg-surface-container-lowest border border-outline-variant hover:border-primary-container scrapbook-photo-card'
                       }`}
                     >
                       {isNoteLayout ? (

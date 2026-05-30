@@ -75,3 +75,80 @@
         transform: translateY(0);
     }
 }
+
+/* TACTILE SCRAPBOOK THEME OVERLAYS */
+
+/* 1. Slight paper card rotations on masonry grid */
+.scrapbook-mode .scrapbook-card {
+    transition: transform 0.3s cubic-bezier(0.25, 0.8, 0.25, 1), box-shadow 0.3s ease, border-color 0.3s ease;
+}
+
+.scrapbook-mode .scrapbook-card:nth-child(2n) {
+    transform: rotate(-0.6deg);
+}
+
+.scrapbook-mode .scrapbook-card:nth-child(2n+1) {
+    transform: rotate(0.6deg);
+}
+
+.scrapbook-mode .scrapbook-card:nth-child(3n) {
+    transform: rotate(-0.4deg);
+}
+
+.scrapbook-mode .scrapbook-card:hover {
+    transform: rotate(0deg) scale(1.02) !important;
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.08) !important;
+    z-index: 10;
+}
+
+/* 2. Translucent masking tape accent on Photo/Portfolio Cards */
+.scrapbook-mode .scrapbook-photo-card {
+    position: relative;
+}
+
+.scrapbook-mode .scrapbook-photo-card::before {
+    content: "";
+    position: absolute;
+    top: -7px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-1.5deg);
+    width: 75px;
+    height: 18px;
+    background: rgba(203, 162, 88, 0.25); /* Warm semi-transparent gold washi tape */
+    backdrop-filter: blur(1px);
+    border-left: 1px dashed rgba(0,0,0,0.08);
+    border-right: 1px dashed rgba(0,0,0,0.08);
+    box-shadow: 0 1px 3px rgba(0, 0, 0, 0.03);
+    z-index: 20;
+    pointer-events: none;
+}
+
+/* 3. Subtle Graph Paper Grid Lines on Notepad Cards */
+.scrapbook-mode .scrapbook-notepad-card {
+    background-color: #faf6ee !important;
+    background-image: 
+        linear-gradient(rgba(0, 108, 68, 0.02) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(0, 108, 68, 0.02) 1px, transparent 1px) !important;
+    background-size: 16px 16px !important;
+    border-top: 1px solid #c4c7c7 !important;
+    border-right: 1px solid #c4c7c7 !important;
+    border-bottom: 1px solid #c4c7c7 !important;
+    box-shadow: 2px 2px 8px rgba(0, 0, 0, 0.02) !important;
+}
+
+/* 4. Handwriting font overrides for annotations, blockquotes, and pull-notes */
+.scrapbook-mode .scrapbook-handwriting {
+    font-family: var(--font-handwriting), 'Caveat', cursive !important;
+}
+
+.scrapbook-mode blockquote {
+    font-family: var(--font-handwriting), 'Caveat', cursive !important;
+    font-size: 1.35rem !important;
+    line-height: 1.45 !important;
+    color: #2b5148 !important;
+    border-left-color: #cba258 !important;
+    background-color: rgba(250, 246, 238, 0.6) !important;
+    padding: 1rem 1.25rem !important;
+    border-radius: 0.375rem !important;
+}
+
