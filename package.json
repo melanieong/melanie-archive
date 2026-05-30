@@ -3,10 +3,10 @@
   "version": "1.0.0",
   "private": true,
   "scripts": {
-    "dev": "next dev -p 8080",
-    "build": "next build",
-    "start": "next start -p 8080",
-    "deploy": "opennextjs-cloudflare build && opennextjs-cloudflare deploy"
+    "dev": "next dev",
+    "build": "opennextjs-cloudflare",
+    "deploy": "opennextjs-cloudflare && wrangler deploy",
+    "start": "next start"
   },
   "dependencies": {
     "graphql": "^16.8.1",
