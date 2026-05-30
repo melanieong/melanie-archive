@@ -1,0 +1,1289 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>MELANIE'S ARCHIVE | Project Management</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;900&family=Literata:wght@600;700&family=Karla&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="style.css" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+            darkMode: "class",
+            theme: {
+                extend: {
+                    "colors": {
+                        "surface-container-highest": "#e0e3de",
+                        "rewards-slate": "#33433d",
+                        "on-primary-fixed-variant": "#005235",
+                        "background": "#f7faf5",
+                        "green-uplift": "#2b5148",
+                        "primary": "#00482f",
+                        "green-light": "#d4e9e2",
+                        "primary-fixed": "#a2f3c8",
+                        "secondary-fixed-dim": "#7cd9a5",
+                        "on-surface-variant": "#3f4943",
+                        "gold": "#cba258",
+                        "on-tertiary-fixed-variant": "#314c44",
+                        "gold-lightest": "#faf6ee",
+                        "on-surface": "#181d1a",
+                        "surface-container-high": "#e6e9e4",
+                        "tertiary-fixed": "#cbe9df",
+                        "inverse-on-surface": "#eef2ec",
+                        "surface-container-low": "#f1f5ef",
+                        "on-error": "#ffffff",
+                        "tertiary": "#28433c",
+                        "on-secondary": "#ffffff",
+                        "error-container": "#ffdad6",
+                        "on-background": "#181d1a",
+                        "on-primary-fixed": "#002113",
+                        "on-secondary-fixed": "#002112",
+                        "on-primary-container": "#8bdbb1",
+                        "surface-container": "#ebefea",
+                        "primary-fixed-dim": "#87d7ad",
+                        "gold-light": "#dfc49d",
+                        "primary-container": "#006241",
+                        "secondary-container": "#97f6c0",
+                        "surface-dim": "#d7dbd6",
+                        "secondary": "#006c44",
+                        "on-secondary-fixed-variant": "#005232",
+                        "ceramic": "#edebe9",
+                        "tertiary-container": "#405b53",
+                        "surface": "#f7faf5",
+                        "neutral-cool": "#f9f9f9",
+                        "surface-tint": "#146b4a",
+                        "inverse-primary": "#87d7ad",
+                        "tertiary-fixed-dim": "#afcdc3",
+                        "on-secondary-container": "#007349",
+                        "surface-container-lowest": "#ffffff",
+                        "error": "#ba1a1a",
+                        "on-tertiary": "#ffffff",
+                        "secondary-fixed": "#97f6c0",
+                        "on-tertiary-fixed": "#04201a",
+                        "surface-variant": "#e0e3de",
+                        "on-error-container": "#93000a",
+                        "canvas-warm": "#f2f0eb",
+                        "on-primary": "#ffffff",
+                        "surface-bright": "#f7faf5",
+                        "inverse-surface": "#2d312e",
+                        "outline-variant": "#bec9c0",
+                        "on-tertiary-container": "#b3d1c7",
+                        "outline": "#6f7a72"
+                    },
+                    "borderRadius": {
+                        "DEFAULT": "0.25rem",
+                        "lg": "0.5rem",
+                        "xl": "0.75rem",
+                        "full": "9999px"
+                    },
+                    "spacing": {
+                        "space-2": "0.8rem",
+                        "space-6": "4.8rem",
+                        "space-4": "2.4rem",
+                        "space-3": "1.6rem",
+                        "space-1": "0.4rem",
+                        "space-7": "6.4rem",
+                        "base": "1.6rem",
+                        "space-5": "3.2rem"
+                    },
+                    "fontFamily": {
+                        "headline-lg": ["Inter"],
+                        "body-lg": ["Inter"],
+                        "display-lg": ["Inter"],
+                        "script-touch": ["karla"],
+                        "body-md": ["Inter"],
+                        "label-md": ["Inter"],
+                        "headline-md": ["Inter"],
+                        "headline-serif": ["literata"]
+                    },
+                    "fontSize": {
+                        "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.16px", "fontWeight": "700"}],
+                        "body-lg": ["19px", {"lineHeight": "1.5", "letterSpacing": "-0.16px", "fontWeight": "400"}],
+                        "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.16px", "fontWeight": "700"}],
+                        "script-touch": ["18px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                        "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "-0.16px", "fontWeight": "400"}],
+                        "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                        "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.16px", "fontWeight": "600"}],
+                        "headline-serif": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}]
+                    }
+                },
+            },
+        }
+    </script>
+    <style>
+        body { background-color: #f2f0eb; min-height: 100vh; }
+        .material-symbols-outlined { font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24; }
+        .table-row-hover:hover { background-color: #f7faf5; transition: background-color 0.2s ease; }
+    </style>
+    <!-- Dynamic Session Guard -->
+    <script src="db.js"></script>
+    <script>
+        if (!db.isAuthenticated()) {
+            window.location.href = 'login.html?redirect=manage-projects.html';
+        }
+    </script>
+</head>
+<body class="bg-canvas-warm text-on-surface font-body-md page-fade-in flex flex-col md:flex-row h-screen overflow-hidden">
+    <!-- SideNavBar Anchor -->
+    <aside class="w-full md:w-64 h-auto md:h-screen bg-canvas-warm border-b md:border-r border-ceramic flex flex-col py-4 px-4 md:py-space-4 md:px-space-2 flex-shrink-0 overflow-y-auto custom-scrollbar z-50">
+        <div class="flex md:flex-col justify-between items-center md:items-start mb-0 md:mb-space-6 cursor-pointer w-full" onclick="window.location.href='index.html'">
+            <div class="ml-2">
+                <h1 class="font-headline-lg text-xl md:text-headline-lg tracking-tighter text-primary leading-tight">MELANIE'S ARCHIVE</h1>
+                <p class="font-label-md text-xs md:text-label-md text-on-surface-variant opacity-70">Creative Archive</p>
+            </div>
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-toggle" onclick="toggleMobileMenu()" class="md:hidden p-2 hover:bg-ceramic rounded-full active-scale flex items-center justify-center">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
+        <nav id="sidebar-nav" class="hidden md:flex flex-col md:flex-grow space-y-2 md:space-y-space-1 w-full mt-4 md:mt-0 pb-4 md:pb-0">
+            <a class="flex items-center gap-space-3 py-space-2 rounded-lg text-on-surface-variant pl-4 hover:bg-ceramic transition-colors active-scale" href="index.html">
+                <span class="material-symbols-outlined">dashboard</span>
+                <span class="font-label-md text-label-md">Overview</span>
+            </a>
+            <a class="flex items-center gap-space-3 py-space-2 rounded-lg text-primary font-bold border-r-4 border-primary pl-4 hover:bg-ceramic transition-colors active-scale" href="manage-projects.html">
+                <span class="material-symbols-outlined">folder_open</span>
+                <span class="font-label-md text-label-md">Projects</span>
+            </a>
+            <a class="flex items-center gap-space-3 py-space-2 rounded-lg text-on-surface-variant pl-4 hover:bg-ceramic transition-colors active-scale" href="dashboard.html">
+                <span class="material-symbols-outlined">settings</span>
+                <span class="font-label-md text-label-md">Admin Panel</span>
+            </a>
+        </nav>
+        <div id="sidebar-bottom-sec" class="hidden md:flex flex-col mt-auto w-full px-2 pt-4 border-t border-ceramic md:border-none">
+            <button onclick="openNewEntryModal()" class="w-full bg-primary-container text-on-primary py-space-3 rounded-full flex items-center justify-center gap-space-2 active-scale transition-transform">
+                <span class="material-symbols-outlined">add</span>
+                <span class="font-label-md text-label-md">New Entry</span>
+            </button>
+            <div class="mt-space-4 w-full">
+                <div class="flex items-center justify-between w-full gap-space-2 px-space-2">
+                    <div class="flex items-center gap-space-2">
+                        <img alt="Melanie O." class="w-8 h-8 rounded-full border border-outline-variant" src="https://www.applesfromny.com/wp-content/uploads/2020/05/20Ounce_NYAS-Apples2.png"/>
+                        <div>
+                            <p class="font-label-md text-label-md leading-none">Melanie O.</p>
+                            <p class="text-[10px] text-on-surface-variant opacity-60">Director</p>
+                        </div>
+                    </div>
+                    <button onclick="handleLogout()" class="p-1 hover:bg-surface-container rounded-full text-error transition-colors" title="Log Out">
+                        <span class="material-symbols-outlined text-[18px]">logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content Area -->
+    <main class="flex-grow h-screen overflow-y-auto custom-scrollbar p-space-5 bg-canvas-warm flex flex-col">
+        <!-- Header Section -->
+        <header class="flex justify-between items-center mb-space-5">
+            <div>
+                <h2 class="font-headline-lg text-headline-lg text-primary-container mb-1 font-bold">Projects</h2>
+                <p class="font-body-md text-body-md text-on-surface-variant">Manage and organize your creative workspace projects.</p>
+            </div>
+            <button onclick="openFormModal()" class="h-[50px] px-space-4 bg-primary hover:bg-[#005e3a] text-white rounded-full font-bold flex items-center gap-2 frap-shadow active:scale-95 transition-transform">
+                <span class="material-symbols-outlined" data-icon="add_circle">add_circle</span>
+                New Project
+            </button>
+        </header>
+
+        <!-- Filters Section -->
+        <div class="flex flex-wrap gap-space-2 mb-space-5 items-center">
+            <button onclick="setStatusFilter('All')" class="filter-tab-btn h-[50px] px-6 bg-primary text-white rounded-full font-semibold transition-colors active-scale">All Projects</button>
+            <button onclick="setStatusFilter('Ongoing')" class="filter-tab-btn h-[50px] px-6 border-2 border-primary text-primary rounded-full font-semibold hover:bg-green-light transition-colors active-scale">In Progress</button>
+            <button onclick="setStatusFilter('Featured')" class="filter-tab-btn h-[50px] px-6 border-2 border-primary text-primary rounded-full font-semibold hover:bg-green-light transition-colors active-scale">Featured</button>
+            <button onclick="setStatusFilter('Archived')" class="filter-tab-btn h-[50px] px-6 border-2 border-primary text-primary rounded-full font-semibold hover:bg-green-light transition-colors active-scale">Archived</button>
+            <button onclick="setStatusFilter('Draft')" class="filter-tab-btn h-[50px] px-6 border-2 border-primary text-primary rounded-full font-semibold hover:bg-green-light transition-colors active-scale">Drafts</button>
+            <div class="ml-auto relative">
+                <span class="material-symbols-outlined absolute left-4 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+                <input id="proj-search" class="h-[50px] pl-12 pr-6 bg-surface-container-lowest border-none rounded-full w-72 focus:ring-2 focus:ring-primary shadow-sm font-body-md text-body-md focus:outline-none" placeholder="Search projects..." type="text"/>
+            </div>
+        </div>
+
+        <!-- Project Table Container -->
+        <section class="bg-surface-container-lowest rounded-xl shadow-sm overflow-hidden border border-outline-variant">
+            <table class="w-full text-left border-collapse">
+                <thead class="bg-surface-container-low">
+                    <tr>
+                        <th class="p-space-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant border-b border-outline-variant">Project</th>
+                        <th class="p-space-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant border-b border-outline-variant">Category</th>
+                        <th class="p-space-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant border-b border-outline-variant">Date Modified</th>
+                        <th class="p-space-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant border-b border-outline-variant">Status</th>
+                        <th class="p-space-4 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant border-b border-outline-variant text-right">Actions</th>
+                    </tr>
+                </thead>
+                <tbody id="projects-table-body" class="divide-y divide-outline-variant">
+                    <!-- Rendered dynamically by JS -->
+                </tbody>
+            </table>
+            <!-- Footer of Table -->
+            <div class="p-space-4 bg-surface-container-lowest flex justify-between items-center border-t border-outline-variant">
+                <p id="table-entries-count" class="font-label-md text-primary font-bold text-sm">Showing 0 projects</p>
+            </div>
+        </section>
+    </main>
+
+    <!-- Slide-Over Form Panel -->
+    <div id="form-panel-overlay" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] hidden transition-opacity duration-300 opacity-0" onclick="closeFormModal()">
+        <div class="absolute right-0 top-0 bottom-0 w-full max-w-lg bg-canvas-warm p-8 flex flex-col justify-between shadow-2xl border-l border-ceramic transform translate-x-full transition-transform duration-300 overflow-y-auto custom-scrollbar" onclick="event.stopPropagation()">
+            <form id="projectForm" class="flex flex-col h-full justify-between">
+                <div>
+                    <div class="flex justify-between items-center mb-8">
+                        <h3 id="form-panel-title" class="font-headline-serif text-3xl text-primary font-bold">New Project</h3>
+                        <button type="button" class="p-2 hover:bg-ceramic rounded-full active-scale" onclick="closeFormModal()">
+                            <span class="material-symbols-outlined">close</span>
+                        </button>
+                    </div>
+                    
+                    <div class="space-y-6">
+                        <input type="hidden" id="project-id-field" />
+                        <!-- Project Title -->
+                        <div class="flex flex-col">
+                            <label class="font-label-md text-xs text-on-surface-variant mb-1 uppercase tracking-wider font-semibold" for="form-title">PROJECT TITLE</label>
+                            <input class="signature-input font-body-md text-body-md text-primary placeholder-outline-variant" id="form-title" placeholder="e.g. Autumn Campaign" required="" type="text"/>
+                        </div>
+                        <!-- Category -->
+                        <div class="flex flex-col">
+                            <label class="font-label-md text-xs text-on-surface-variant mb-1 uppercase tracking-wider font-semibold" for="form-category">CATEGORY</label>
+                            <input class="signature-input font-body-md text-body-md text-primary placeholder-outline-variant" id="form-category" placeholder="e.g. Design / Brand" required="" type="text"/>
+                        </div>
+                        <!-- Status Selection -->
+                        <div class="flex flex-col">
+                            <label class="font-label-md text-xs text-on-surface-variant mb-2 uppercase tracking-wider font-semibold" for="form-status">STATUS</label>
+                            <select id="form-status" class="bg-surface-container-lowest border-outline-variant rounded-lg p-3 font-body-md text-on-surface focus:ring-primary focus:border-primary">
+                                <option value="Ongoing">Ongoing (In Progress)</option>
+                                <option value="Featured">Featured</option>
+                                <option value="Draft">Draft</option>
+                                <option value="Archived">Archived</option>
+                            </select>
+                        </div>
+                        <!-- Image URL -->
+                        <div class="flex flex-col">
+                            <label class="font-label-md text-xs text-on-surface-variant mb-1 uppercase tracking-wider font-semibold" for="form-image">IMAGE URL (UNSPLASH LINK PREFERABLE)</label>
+                            <input class="signature-input font-body-md text-body-md text-primary placeholder-outline-variant" id="form-image" placeholder="https://images.unsplash.com/photo-..." type="url"/>
+                        </div>
+                        <!-- Description -->
+                        <div class="flex flex-col">
+                            <label class="font-label-md text-xs text-on-surface-variant mb-2 uppercase tracking-wider font-semibold" for="form-desc">SHORT DESCRIPTION</label>
+                            <textarea id="form-desc" rows="3" class="bg-surface-container-lowest border-outline-variant rounded-lg p-3 font-body-md text-on-surface focus:ring-primary focus:border-primary" placeholder="Provide a brief summary card narrative..."></textarea>
+                        </div>
+                        <!-- Detailed Content -->
+                        <div class="flex flex-col">
+                            <label class="font-label-md text-xs text-on-surface-variant mb-2 uppercase tracking-wider font-semibold" for="form-detail">DETAILED MONOGRAPH TEXT</label>
+                            <textarea id="form-detail" rows="5" class="bg-surface-container-lowest border-outline-variant rounded-lg p-3 font-body-md text-on-surface focus:ring-primary focus:border-primary" placeholder="Provide full project editorial timeline text..."></textarea>
+                        </div>
+
+                        <!-- Timeline & Milestones Manager -->
+                        <div class="flex flex-col border-t border-ceramic pt-6 mt-6">
+                            <div class="flex justify-between items-center mb-4">
+                                <label class="font-label-md text-xs text-on-surface-variant uppercase tracking-wider font-semibold font-bold">Timeline &amp; Milestones</label>
+                                <button type="button" onclick="openMilestoneForm()" class="bg-green-light hover:bg-[#c3dfd7] text-primary px-4 py-1.5 rounded-full font-bold text-xs flex items-center gap-1 active-scale transition-colors">
+                                    <span class="material-symbols-outlined text-[16px]">add</span> Add Milestone
+                                </button>
+                            </div>
+                            <div id="milestones-form-container" class="space-y-3 max-h-72 overflow-y-auto custom-scrollbar pr-1">
+                                <!-- Loaded dynamically via JavaScript -->
+                                <p class="text-xs text-on-surface-variant opacity-60 italic py-2 text-center">No milestones added yet. Add milestones to show on the project details timeline.</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="flex items-center gap-4 mt-10 border-t border-ceramic pt-6">
+                    <button type="submit" class="flex-grow bg-primary hover:bg-[#005e3a] text-white py-4 rounded-full font-bold active-scale transition-transform shadow-md uppercase tracking-widest text-sm">Save Project</button>
+                    <button type="button" onclick="closeFormModal()" class="flex-grow bg-ceramic hover:bg-[#dcdad5] text-on-surface py-4 rounded-full font-bold active-scale transition-transform uppercase tracking-widest text-sm">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Delete Confirmation Modal -->
+    <div id="delete-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[110] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300">
+        <div class="bg-canvas-warm p-8 rounded-2xl max-w-md w-full shadow-2xl border border-ceramic transform scale-95 transition-transform duration-300">
+            <h3 class="font-headline-serif text-2xl text-primary font-bold mb-4">Confirm Deletion</h3>
+            <p class="font-body-md text-on-surface-variant mb-8 leading-relaxed">Are you absolutely sure you want to delete this project entry? This will permanently erase the records from LocalStorage. This action cannot be undone.</p>
+            <div class="flex items-center gap-4">
+                <button id="delete-confirm-btn" class="flex-grow bg-error hover:bg-[#a11414] text-white py-3 rounded-full font-bold active-scale transition-transform shadow-sm">Delete Entry</button>
+                <button onclick="closeDeleteModal()" class="flex-grow bg-ceramic hover:bg-[#dcdad5] text-on-surface py-3 rounded-full font-bold active-scale transition-transform">Cancel</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Milestone Form Modal -->
+    <div id="milestone-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[110] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeMilestoneModal()">
+        <div class="bg-canvas-warm p-8 rounded-2xl max-w-md w-full shadow-2xl border border-ceramic transform scale-95 transition-transform duration-300 overflow-y-auto max-h-[90vh] custom-scrollbar" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center mb-6">
+                <h3 id="milestone-modal-title" class="font-headline-serif text-2xl text-primary font-bold">Add Milestone</h3>
+                <button type="button" class="p-2 hover:bg-ceramic rounded-full active-scale" onclick="closeMilestoneModal()">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <form id="milestoneForm" onsubmit="saveMilestone(event)" class="space-y-4">
+                <input type="hidden" id="milestone-index-field" />
+                
+                <!-- Title -->
+                <div class="flex flex-col">
+                    <label class="font-label-md text-xs text-on-surface-variant mb-1 uppercase tracking-wider font-semibold" for="ms-title">Milestone Title</label>
+                    <input class="signature-input font-body-md text-body-md text-primary placeholder-outline-variant" id="ms-title" placeholder="e.g. Week 01: The Gear Setup" required type="text"/>
+                </div>
+
+                <!-- Row for Type & Date -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col">
+                        <label class="font-label-md text-xs text-on-surface-variant mb-1 uppercase tracking-wider font-semibold">Type</label>
+                        <div id="ms-type-chips" class="flex flex-wrap gap-1 mb-2"></div>
+                        <input class="signature-input font-body-md text-body-md text-primary placeholder-outline-variant text-[13px] py-1 px-2.5 h-[36px]" id="ms-type" placeholder="Or type custom..." required type="text"/>
+                    </div>
+                    <div class="flex flex-col justify-end">
+                        <label class="font-label-md text-xs text-on-surface-variant mb-1 uppercase tracking-wider font-semibold" for="ms-date">Date String</label>
+                        <input class="signature-input font-body-md text-body-md text-primary placeholder-outline-variant" id="ms-date" placeholder="e.g. Jan 12, 2024" required type="text"/>
+                    </div>
+                </div>
+
+                <!-- Row for Badge Label & Icon -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col">
+                        <label class="font-label-md text-xs text-on-surface-variant mb-1 uppercase tracking-wider font-semibold">Badge Label</label>
+                        <div id="ms-label-chips" class="flex flex-wrap gap-1 mb-2"></div>
+                        <input class="signature-input font-body-md text-body-md text-primary placeholder-outline-variant text-[13px] py-1 px-2.5 h-[36px]" id="ms-label" placeholder="Or type custom..." required type="text"/>
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="font-label-md text-xs text-on-surface-variant mb-1 uppercase tracking-wider font-semibold">Material Icon</label>
+                        <div id="ms-icon-chips" class="flex flex-wrap gap-1 mb-2"></div>
+                        <input class="signature-input font-body-md text-body-md text-primary placeholder-outline-variant text-[13px] py-1 px-2.5 h-[36px]" id="ms-icon" placeholder="Or type custom..." required type="text"/>
+                    </div>
+                </div>
+
+                <!-- Typewriter Note Toggle -->
+                <div class="flex items-center gap-2 py-2">
+                    <input type="checkbox" id="ms-isnote" onchange="toggleMilestoneNoteField()" class="rounded border-outline-variant text-primary focus:ring-primary h-4 w-4" />
+                    <label class="font-label-md text-xs text-on-surface-variant uppercase tracking-wider font-semibold" for="ms-isnote">Typewriter Note (Text Notepad Layout)</label>
+                </div>
+
+                <!-- Save as Draft Toggle -->
+                <div class="flex items-center gap-2 py-2">
+                    <input type="checkbox" id="ms-isdraft" class="rounded border-outline-variant text-primary focus:ring-primary h-4 w-4" />
+                    <label class="font-label-md text-xs text-on-surface-variant uppercase tracking-wider font-semibold cursor-pointer select-none" for="ms-isdraft">Save as Draft</label>
+                </div>
+
+                <!-- Image URL -->
+                <div class="flex flex-col" id="ms-image-group">
+                    <label class="font-label-md text-xs text-on-surface-variant mb-1 uppercase tracking-wider font-semibold" for="ms-image">Image URL</label>
+                    <input class="signature-input font-body-md text-body-md text-primary placeholder-outline-variant" id="ms-image" placeholder="https://images.unsplash.com/photo-..." type="url"/>
+                </div>
+
+                <!-- Description -->
+                <div class="flex flex-col">
+                    <label class="font-label-md text-xs text-on-surface-variant mb-2 uppercase tracking-wider font-semibold" for="ms-desc">Description / Content</label>
+                    <div class="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-t-lg border-t border-r border-l border-outline-variant select-none text-[11px] font-semibold text-on-surface-variant">
+                        <button type="button" onclick="insertFormatting('ms-desc', '**', '**')" class="px-2 py-0.5 hover:bg-ceramic rounded font-bold" title="Bold">B</button>
+                        <button type="button" onclick="insertFormatting('ms-desc', '*', '*')" class="px-2 py-0.5 hover:bg-ceramic rounded italic" title="Italic">I</button>
+                        <button type="button" onclick="insertFormatting('ms-desc', '~~', '~~')" class="px-2 py-0.5 hover:bg-ceramic rounded line-through" title="Strikethrough">S</button>
+                        <button type="button" onclick="insertFormatting('ms-desc', '__', '__')" class="px-2 py-0.5 hover:bg-ceramic rounded underline" title="Underline">U</button>
+                        <button type="button" onclick="insertFormatting('ms-desc', '# ', '')" class="px-2 py-0.5 hover:bg-ceramic rounded font-bold" title="Heading">H</button>
+                        <button type="button" onclick="insertFormatting('ms-desc', '> ', '')" class="px-2 py-0.5 hover:bg-ceramic rounded font-bold" title="Pull Quote">Quote</button>
+                    </div>
+                    <textarea id="ms-desc" rows="4" class="bg-surface-container-lowest border-outline-variant rounded-b-lg border-t-0 p-3 font-body-md text-on-surface focus:ring-primary focus:border-primary" placeholder="Provide milestone story, notes, or reflection text..." required></textarea>
+                </div>
+
+                <div class="flex items-center gap-4 pt-4 border-t border-ceramic">
+                    <button type="submit" class="flex-grow bg-primary hover:bg-[#005e3a] text-white py-3 rounded-full font-bold active-scale transition-transform shadow-md uppercase tracking-widest text-xs">Save Milestone</button>
+                    <button type="button" onclick="closeMilestoneModal()" class="flex-grow bg-ceramic hover:bg-[#dcdad5] text-on-surface py-3 rounded-full font-bold active-scale transition-transform uppercase tracking-widest text-xs">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Direct New Entry (Milestone) Form Modal -->
+    <div id="new-entry-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[110] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeNewEntryModal()">
+        <div class="bg-canvas-warm p-8 rounded-2xl max-w-md w-full shadow-2xl border border-ceramic transform scale-95 transition-transform duration-300 overflow-y-auto max-h-[90vh] custom-scrollbar" onclick="event.stopPropagation()">
+            <div class="flex justify-between items-center mb-6">
+                <h3 class="font-headline-serif text-2xl text-primary font-bold">Write New Entry</h3>
+                <button type="button" class="p-2 hover:bg-ceramic rounded-full active-scale" onclick="closeNewEntryModal()">
+                    <span class="material-symbols-outlined">close</span>
+                </button>
+            </div>
+            <form id="newEntryForm" onsubmit="saveNewEntry(event)" class="space-y-4">
+                <!-- Project Selection -->
+                <div class="flex flex-col">
+                    <label class="font-label-md text-xs text-on-surface-variant mb-1 uppercase tracking-wider font-semibold" for="entry-project-select">Categorize Under Project</label>
+                    <select id="entry-project-select" class="bg-surface-container-lowest border-outline-variant rounded-lg p-3 font-body-md text-on-surface focus:ring-primary focus:border-primary" required>
+                        <!-- Loaded dynamically via JavaScript -->
+                    </select>
+                </div>
+
+                <!-- Title -->
+                <div class="flex flex-col">
+                    <label class="font-label-md text-xs text-on-surface-variant mb-1 uppercase tracking-wider font-semibold" for="entry-title">Entry Title</label>
+                    <input class="signature-input font-body-md text-body-md text-primary placeholder-outline-variant" id="entry-title" placeholder="e.g. Week 01: The Gear Setup" required type="text"/>
+                </div>
+
+                <!-- Row for Type & Date -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col">
+                        <label class="font-label-md text-xs text-on-surface-variant mb-1 uppercase tracking-wider font-semibold">Type</label>
+                        <div id="entry-type-chips" class="flex flex-wrap gap-1 mb-2"></div>
+                        <input class="signature-input font-body-md text-body-md text-primary placeholder-outline-variant text-[13px] py-1 px-2.5 h-[36px]" id="entry-type" placeholder="Or type custom..." required type="text"/>
+                    </div>
+                    <div class="flex flex-col justify-end">
+                        <label class="font-label-md text-xs text-on-surface-variant mb-1 uppercase tracking-wider font-semibold" for="entry-date">Date String</label>
+                        <input class="signature-input font-body-md text-body-md text-primary placeholder-outline-variant" id="entry-date" placeholder="e.g. Jan 12, 2024" required type="text"/>
+                    </div>
+                </div>
+
+                <!-- Row for Badge Label & Icon -->
+                <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col">
+                        <label class="font-label-md text-xs text-on-surface-variant mb-1 uppercase tracking-wider font-semibold">Badge Label</label>
+                        <div id="entry-label-chips" class="flex flex-wrap gap-1 mb-2"></div>
+                        <input class="signature-input font-body-md text-body-md text-primary placeholder-outline-variant text-[13px] py-1 px-2.5 h-[36px]" id="entry-label" placeholder="Or type custom..." required type="text"/>
+                    </div>
+                    <div class="flex flex-col">
+                        <label class="font-label-md text-xs text-on-surface-variant mb-1 uppercase tracking-wider font-semibold">Material Icon</label>
+                        <div id="entry-icon-chips" class="flex flex-wrap gap-1 mb-2"></div>
+                        <input class="signature-input font-body-md text-body-md text-primary placeholder-outline-variant text-[13px] py-1 px-2.5 h-[36px]" id="entry-icon" placeholder="Or type custom..." required type="text"/>
+                    </div>
+                </div>
+
+                <!-- Typewriter Note Toggle -->
+                <div class="flex items-center gap-2 py-2">
+                    <input type="checkbox" id="entry-isnote" onchange="toggleEntryNoteField()" class="rounded border-outline-variant text-primary focus:ring-primary h-4 w-4" />
+                    <label class="font-label-md text-xs text-on-surface-variant uppercase tracking-wider font-semibold" for="entry-isnote">Typewriter Note (Text Notepad Layout)</label>
+                </div>
+
+                <!-- Save as Draft Toggle -->
+                <div class="flex items-center gap-2 py-2">
+                    <input type="checkbox" id="entry-isdraft" class="rounded border-outline-variant text-primary focus:ring-primary h-4 w-4" />
+                    <label class="font-label-md text-xs text-on-surface-variant uppercase tracking-wider font-semibold cursor-pointer select-none" for="entry-isdraft">Save as Draft</label>
+                </div>
+
+                <!-- Image URL -->
+                <div class="flex flex-col" id="entry-image-group">
+                    <label class="font-label-md text-xs text-on-surface-variant mb-1 uppercase tracking-wider font-semibold" for="entry-image">Image URL</label>
+                    <input class="signature-input font-body-md text-body-md text-primary placeholder-outline-variant" id="entry-image" placeholder="https://images.unsplash.com/photo-..." type="url"/>
+                </div>
+
+                <!-- Description -->
+                <div class="flex flex-col">
+                    <label class="font-label-md text-xs text-on-surface-variant mb-2 uppercase tracking-wider font-semibold" for="entry-desc">Description / Content</label>
+                    <div class="flex items-center gap-2 bg-surface-container-low px-3 py-1.5 rounded-t-lg border-t border-r border-l border-outline-variant select-none text-[11px] font-semibold text-on-surface-variant">
+                        <button type="button" onclick="insertFormatting('entry-desc', '**', '**')" class="px-2 py-0.5 hover:bg-ceramic rounded font-bold" title="Bold">B</button>
+                        <button type="button" onclick="insertFormatting('entry-desc', '*', '*')" class="px-2 py-0.5 hover:bg-ceramic rounded italic" title="Italic">I</button>
+                        <button type="button" onclick="insertFormatting('entry-desc', '~~', '~~')" class="px-2 py-0.5 hover:bg-ceramic rounded line-through" title="Strikethrough">S</button>
+                        <button type="button" onclick="insertFormatting('entry-desc', '__', '__')" class="px-2 py-0.5 hover:bg-ceramic rounded underline" title="Underline">U</button>
+                        <button type="button" onclick="insertFormatting('entry-desc', '# ', '')" class="px-2 py-0.5 hover:bg-ceramic rounded font-bold" title="Heading">H</button>
+                        <button type="button" onclick="insertFormatting('entry-desc', '> ', '')" class="px-2 py-0.5 hover:bg-ceramic rounded font-bold" title="Pull Quote">Quote</button>
+                    </div>
+                    <textarea id="entry-desc" rows="4" class="bg-surface-container-lowest border-outline-variant rounded-b-lg border-t-0 p-3 font-body-md text-on-surface focus:ring-primary focus:border-primary" placeholder="Provide milestone story, notes, or reflection text..." required></textarea>
+                </div>
+
+                <div class="flex items-center gap-4 pt-4 border-t border-ceramic">
+                    <button type="submit" class="flex-grow bg-primary hover:bg-[#005e3a] text-white py-3 rounded-full font-bold active-scale transition-transform shadow-md uppercase tracking-widest text-xs">Save Entry</button>
+                    <button type="button" onclick="closeNewEntryModal()" class="flex-grow bg-ceramic hover:bg-[#dcdad5] text-on-surface py-3 rounded-full font-bold active-scale transition-transform uppercase tracking-widest text-xs">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <script>
+        let currentFilter = 'All';
+        let searchQuery = '';
+        let pendingDeleteId = null;
+        let tempMilestones = [];
+
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTable();
+            setupSearch();
+            checkUrlActions();
+            initChipsToggles();
+        });
+
+        function handleLogout() {
+            db.logout();
+            window.location.href = 'login.html';
+        }
+
+        function checkUrlActions() {
+            const urlParams = new URLSearchParams(window.location.search);
+            const action = urlParams.get('action');
+            const id = urlParams.get('id');
+
+            if (action === 'new') {
+                openFormModal();
+            } else if (action === 'edit' && id) {
+                editProject(id);
+            } else if (action === 'new-entry') {
+                const projectId = urlParams.get('projectId');
+                openNewEntryModal(projectId);
+            }
+
+            // preseed search from dashboard
+            const searchParam = urlParams.get('search');
+            if (searchParam) {
+                document.getElementById('proj-search').value = searchParam;
+                searchQuery = searchParam;
+                renderTable();
+            }
+        }
+
+        function setupSearch() {
+            const searchInput = document.getElementById('proj-search');
+            searchInput.addEventListener('input', (e) => {
+                searchQuery = e.target.value;
+                renderTable();
+            });
+        }
+
+        function renderTable() {
+            const tbody = document.getElementById('projects-table-body');
+            tbody.innerHTML = '';
+
+            let projects = db.getProjects();
+
+            // Search filter
+            if (searchQuery.trim() !== '') {
+                const query = searchQuery.toLowerCase();
+                projects = projects.filter(p => 
+                    p.title.toLowerCase().includes(query) || 
+                    p.category.toLowerCase().includes(query)
+                );
+            }
+
+            // Status isolation tabs
+            if (currentFilter !== 'All') {
+                projects = projects.filter(p => {
+                    const status = p.status ? p.status.toLowerCase() : '';
+                    if (currentFilter === 'Ongoing') {
+                        return status === 'ongoing' || status === 'in progress' || status === 'active';
+                    }
+                    return status === currentFilter.toLowerCase();
+                });
+            }
+
+            document.getElementById('table-entries-count').innerText = `Showing ${projects.length} of ${db.getProjects().length} projects`;
+
+            if (projects.length === 0) {
+                tbody.innerHTML = `
+                    <tr>
+                        <td colspan="5" class="p-12 text-center text-on-surface-variant font-body-lg">
+                            <span class="material-symbols-outlined text-5xl mb-2 text-outline">search_off</span>
+                            <p>No project workspace files found matching criteria.</p>
+                        </td>
+                    </tr>
+                `;
+                return;
+            }
+
+            projects.forEach(p => {
+                const tr = document.createElement('tr');
+                tr.className = 'table-row-hover group';
+
+                const statusColor = p.status === 'Ongoing' ? 'bg-[#d4e9e2] text-[#006c44]' : (p.status === 'Featured' ? 'bg-[#00482f] text-white' : 'bg-ceramic text-on-surface-variant');
+                const dateStr = p.id.length > 5 ? new Date(Number(p.id)).toLocaleDateString('en-US', {month: 'short', day: '2-digit', year: 'numeric'}) : "Oct 24, 2024";
+
+                tr.innerHTML = `
+                    <td class="p-space-4">
+                        <div class="flex items-center gap-3">
+                            <img alt="${p.title}" class="w-12 h-12 rounded-lg object-cover border border-outline-variant" src="${p.imageUrl}"/>
+                            <div>
+                                <p onclick="window.location.href='project-detail.html?id=${p.id}'" class="font-headline-md text-[18px] text-on-surface font-semibold hover:text-primary cursor-pointer">${p.title}</p>
+                                <p class="font-body-md text-sm text-outline">${p.year.includes('Ongoing') ? 'v1.0 (Live)' : 'v1.0 (Archive)'}</p>
+                            </div>
+                        </div>
+                    </td>
+                    <td class="p-space-4">
+                        <span class="inline-flex items-center px-3 py-1 rounded-full bg-green-light text-on-primary-fixed-variant font-label-md text-xs font-semibold">${p.category}</span>
+                    </td>
+                    <td class="p-space-4 font-body-md text-on-surface-variant">${dateStr}</td>
+                    <td class="p-space-4">
+                        <div class="flex items-center gap-2 font-semibold">
+                            <span class="w-2.5 h-2.5 rounded-full ${p.status === 'Ongoing' || p.status === 'Featured' ? 'bg-[#00754a]' : 'bg-[#bec9c0]'}"></span>
+                            <span class="font-label-md text-label-md">${p.status}</span>
+                        </div>
+                    </td>
+                    <td class="p-space-4 text-right">
+                        <div class="flex justify-end gap-2 opacity-0 group-hover:opacity-100 transition-opacity">
+                            <button onclick="editProject('${p.id}')" class="p-2 hover:bg-surface-container-high rounded-full text-on-surface-variant hover:text-primary transition-colors" title="Edit"><span class="material-symbols-outlined">edit</span></button>
+                            <button onclick="window.open('project-detail.html?id=${p.id}')" class="p-2 hover:bg-surface-container-high rounded-full text-on-surface-variant hover:text-secondary transition-colors" title="View Detail"><span class="material-symbols-outlined">visibility</span></button>
+                            <button onclick="triggerDelete('${p.id}')" class="p-2 hover:bg-surface-container-high rounded-full text-error hover:bg-error-container transition-colors" title="Delete"><span class="material-symbols-outlined">delete</span></button>
+                        </div>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function setStatusFilter(filter) {
+            currentFilter = filter;
+            const buttons = document.querySelectorAll('.filter-tab-btn');
+            buttons.forEach(btn => {
+                btn.className = 'filter-tab-btn h-[50px] px-6 border-2 border-primary text-primary rounded-full font-semibold hover:bg-green-light transition-colors active-scale';
+                if (btn.textContent.includes(filter) || (filter === 'All' && btn.textContent.includes('All Projects')) || (filter === 'Ongoing' && btn.textContent.includes('In Progress'))) {
+                    btn.className = 'filter-tab-btn h-[50px] px-6 bg-primary text-white rounded-full font-semibold transition-colors active-scale';
+                }
+            });
+            renderTable();
+        }
+
+        // Form slide-out management
+        function openFormModal() {
+            const overlay = document.getElementById('form-panel-overlay');
+            const panel = overlay.firstElementChild;
+            
+            document.getElementById('projectForm').reset();
+            document.getElementById('project-id-field').value = '';
+            document.getElementById('form-panel-title').innerText = 'New Project';
+
+            // Reset temporary milestones
+            tempMilestones = [];
+            renderFormMilestones();
+
+            overlay.classList.remove('hidden');
+            setTimeout(() => {
+                overlay.classList.remove('opacity-0');
+                panel.classList.remove('translate-x-full');
+            }, 10);
+        }
+
+        function closeFormModal() {
+            const overlay = document.getElementById('form-panel-overlay');
+            const panel = overlay.firstElementChild;
+
+            overlay.classList.add('opacity-0');
+            panel.classList.add('translate-x-full');
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+            }, 300);
+
+            // Clean clean actions from URL
+            const url = new URL(window.location.href);
+            url.searchParams.delete('action');
+            url.searchParams.delete('id');
+            window.history.pushState({}, '', url);
+        }
+
+        function editProject(id) {
+            const project = db.getProjectById(id);
+            if (!project) return;
+
+            openFormModal();
+            document.getElementById('form-panel-title').innerText = 'Edit Project';
+            document.getElementById('project-id-field').value = project.id;
+            document.getElementById('form-title').value = project.title;
+            document.getElementById('form-category').value = project.category;
+            document.getElementById('form-status').value = project.status;
+            document.getElementById('form-image').value = project.imageUrl;
+            document.getElementById('form-desc').value = project.description;
+            document.getElementById('form-detail').value = project.detailedContent || '';
+
+            // Clone milestones
+            tempMilestones = project.milestones ? JSON.parse(JSON.stringify(project.milestones)) : [];
+            renderFormMilestones();
+        }
+
+        // Form submission
+        document.getElementById('projectForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const id = document.getElementById('project-id-field').value;
+            
+            // Visual loading state
+            const saveBtn = e.target.querySelector('button[type="submit"]');
+            const originalText = saveBtn.innerText;
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = `
+                <span class="inline-flex items-center gap-2">
+                    <span class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    Saving...
+                </span>
+            `;
+
+            const projectData = {
+                title: document.getElementById('form-title').value,
+                category: document.getElementById('form-category').value,
+                status: document.getElementById('form-status').value,
+                imageUrl: document.getElementById('form-image').value || "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=400&q=80",
+                description: document.getElementById('form-desc').value,
+                detailedContent: document.getElementById('form-detail').value,
+                year: new Date().getFullYear().toString(),
+                milestones: tempMilestones
+            };
+
+            if (id) {
+                await db.updateProject(id, projectData);
+            } else {
+                await db.addProject(projectData);
+            }
+
+            closeFormModal();
+            renderTable();
+        });
+
+        // Timeline & Milestone Manager Functions
+        function renderFormMilestones() {
+            const container = document.getElementById('milestones-form-container');
+            container.innerHTML = '';
+
+            if (tempMilestones.length === 0) {
+                container.innerHTML = `
+                    <p class="text-xs text-on-surface-variant opacity-60 italic py-4 text-center">No milestones added yet. Add milestones to show on the project details timeline.</p>
+                `;
+                return;
+            }
+
+            tempMilestones.forEach((m, idx) => {
+                const div = document.createElement('div');
+                div.className = 'flex items-center justify-between p-3 bg-surface-container-low rounded-lg border border-outline-variant/60 gap-3 group/ms';
+                
+                const imgSection = m.isNote 
+                    ? `<span class="material-symbols-outlined text-secondary text-2xl flex items-center justify-center w-10 h-10 bg-ceramic rounded border border-outline-variant">history_edu</span>`
+                    : `<img class="w-10 h-10 rounded object-cover border border-outline-variant" src="${m.imageUrl || 'https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=80&q=80'}" />`;
+
+                div.innerHTML = `
+                    <div class="flex items-center gap-3 overflow-hidden flex-grow text-left">
+                        <div class="flex-shrink-0">
+                            ${imgSection}
+                        </div>
+                        <div class="overflow-hidden flex-grow">
+                            <h5 class="font-bold text-xs text-on-surface truncate leading-tight">${m.title}</h5>
+                            <p class="text-[9px] text-outline uppercase tracking-wider font-semibold mt-0.5">${m.editedDate ? `${m.date} (Edited: ${m.editedDate})` : m.date} &bull; ${m.type} &bull; ${m.label}</p>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-1 flex-shrink-0">
+                        <button type="button" onclick="moveMilestone(${idx}, -1)" class="p-1 hover:bg-ceramic rounded text-on-surface-variant disabled:opacity-20 active-scale" ${idx === 0 ? 'disabled' : ''} title="Move Up">
+                            <span class="material-symbols-outlined text-[16px]">arrow_upward</span>
+                        </button>
+                        <button type="button" onclick="moveMilestone(${idx}, 1)" class="p-1 hover:bg-ceramic rounded text-on-surface-variant disabled:opacity-20 active-scale" ${idx === tempMilestones.length - 1 ? 'disabled' : ''} title="Move Down">
+                            <span class="material-symbols-outlined text-[16px]">arrow_downward</span>
+                        </button>
+                        <button type="button" onclick="openMilestoneForm(${idx})" class="p-1 hover:bg-ceramic rounded text-primary active-scale" title="Edit">
+                            <span class="material-symbols-outlined text-[16px]">edit</span>
+                        </button>
+                        <button type="button" onclick="deleteMilestone(${idx})" class="p-1 hover:bg-error-container hover:text-error rounded text-outline active-scale" title="Delete">
+                            <span class="material-symbols-outlined text-[16px]">delete</span>
+                        </button>
+                    </div>
+                `;
+                container.appendChild(div);
+            });
+        }
+
+        function openMilestoneForm(index = null) {
+            const modal = document.getElementById('milestone-modal');
+            const form = document.getElementById('milestoneForm');
+            form.reset();
+
+            const titleEl = document.getElementById('milestone-modal-title');
+            const indexField = document.getElementById('milestone-index-field');
+
+            if (index !== null && index !== undefined) {
+                titleEl.innerText = 'Edit Milestone';
+                indexField.value = index;
+
+                const m = tempMilestones[index];
+                document.getElementById('ms-title').value = m.title || '';
+                document.getElementById('ms-type').value = m.type || '';
+                document.getElementById('ms-date').value = m.date || '';
+                document.getElementById('ms-label').value = m.label || '';
+                document.getElementById('ms-icon').value = m.icon || '';
+                document.getElementById('ms-isnote').checked = m.isNote || false;
+                document.getElementById('ms-isdraft').checked = m.isDraft || false;
+                document.getElementById('ms-image').value = m.imageUrl || '';
+                document.getElementById('ms-desc').value = m.description || '';
+            } else {
+                titleEl.innerText = 'Add Milestone';
+                indexField.value = '';
+                // Set default date string matching current date
+                document.getElementById('ms-date').value = new Date().toLocaleDateString('en-US', {month: 'short', day: '2-digit', year: 'numeric'});
+                document.getElementById('ms-type').value = 'Note';
+                document.getElementById('ms-label').value = 'Written Log';
+                document.getElementById('ms-icon').value = 'history_edu';
+                document.getElementById('ms-isnote').checked = true;
+                document.getElementById('ms-isdraft').checked = false;
+            }
+
+            // Trigger input events to update chips highlight
+            document.getElementById('ms-type').dispatchEvent(new Event('input'));
+            document.getElementById('ms-label').dispatchEvent(new Event('input'));
+            document.getElementById('ms-icon').dispatchEvent(new Event('input'));
+
+            toggleMilestoneNoteField();
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.firstElementChild.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeMilestoneModal() {
+            const modal = document.getElementById('milestone-modal');
+            const child = modal.firstElementChild;
+
+            modal.classList.add('opacity-0');
+            child.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function toggleMilestoneNoteField() {
+            const isNote = document.getElementById('ms-isnote').checked;
+            const imageGroup = document.getElementById('ms-image-group');
+            if (isNote) {
+                imageGroup.classList.add('hidden');
+            } else {
+                imageGroup.classList.remove('hidden');
+            }
+        }
+
+        function saveMilestone(event) {
+            event.preventDefault();
+            const indexVal = document.getElementById('milestone-index-field').value;
+            const isNote = document.getElementById('ms-isnote').checked;
+
+            const milestone = {
+                title: document.getElementById('ms-title').value,
+                type: document.getElementById('ms-type').value,
+                date: document.getElementById('ms-date').value,
+                label: document.getElementById('ms-label').value,
+                icon: document.getElementById('ms-icon').value,
+                isNote: isNote,
+                isDraft: document.getElementById('ms-isdraft').checked,
+                description: document.getElementById('ms-desc').value,
+            };
+
+            if (!isNote) {
+                milestone.imageUrl = document.getElementById('ms-image').value || "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80";
+            }
+
+            if (indexVal !== '') {
+                // Edit mode
+                const todayStr = new Date().toLocaleDateString('en-US', {month: 'short', day: '2-digit', year: 'numeric'});
+                milestone.editedDate = todayStr;
+                tempMilestones[parseInt(indexVal)] = milestone;
+            } else {
+                // Add mode
+                tempMilestones.push(milestone);
+            }
+
+            closeMilestoneModal();
+            renderFormMilestones();
+        }
+
+        function deleteMilestone(index) {
+            if (confirm('Are you sure you want to delete this milestone?')) {
+                tempMilestones.splice(index, 1);
+                renderFormMilestones();
+            }
+        }
+
+        function moveMilestone(index, direction) {
+            const newIndex = index + direction;
+            if (newIndex < 0 || newIndex >= tempMilestones.length) return;
+
+            // Swap elements
+            const temp = tempMilestones[index];
+            tempMilestones[index] = tempMilestones[newIndex];
+            tempMilestones[newIndex] = temp;
+
+            renderFormMilestones();
+        }
+
+        // Delete flow
+        function triggerDelete(id) {
+            pendingDeleteId = id;
+            const overlay = document.getElementById('delete-modal');
+            const panel = overlay.firstElementChild;
+
+            overlay.classList.remove('hidden');
+            setTimeout(() => {
+                overlay.classList.remove('opacity-0');
+                panel.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeDeleteModal() {
+            const overlay = document.getElementById('delete-modal');
+            const panel = overlay.firstElementChild;
+
+            overlay.classList.add('opacity-0');
+            panel.classList.add('scale-95');
+            setTimeout(() => {
+                overlay.classList.add('hidden');
+                pendingDeleteId = null;
+            }, 300);
+        }
+
+        document.getElementById('delete-confirm-btn').addEventListener('click', async () => {
+            if (pendingDeleteId) {
+                // Visual loading state
+                const deleteBtn = document.getElementById('delete-confirm-btn');
+                const originalText = deleteBtn.innerText;
+                deleteBtn.disabled = true;
+                deleteBtn.innerHTML = `
+                    <span class="inline-flex items-center gap-2">
+                        <span class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                        Deleting...
+                    </span>
+                `;
+
+                await db.deleteProject(pendingDeleteId);
+                deleteBtn.disabled = false;
+                deleteBtn.innerText = originalText;
+                closeDeleteModal();
+                renderTable();
+            }
+        });
+
+        // Direct Entry Modal Controllers
+        function openNewEntryModal(preselectedProjectId = null) {
+            const projects = db.getProjects();
+            const select = document.getElementById('entry-project-select');
+            const form = document.getElementById('newEntryForm');
+            
+            // Clear previous elements
+            select.innerHTML = '';
+            form.reset();
+
+            // Set default date string to today
+            document.getElementById('entry-date').value = new Date().toLocaleDateString('en-US', {month: 'short', day: '2-digit', year: 'numeric'});
+            document.getElementById('entry-type').value = 'Note';
+            document.getElementById('entry-label').value = 'Written Log';
+            document.getElementById('entry-icon').value = 'history_edu';
+            document.getElementById('entry-isnote').checked = true;
+
+            // Trigger input events to update chips highlight
+            document.getElementById('entry-type').dispatchEvent(new Event('input'));
+            document.getElementById('entry-label').dispatchEvent(new Event('input'));
+            document.getElementById('entry-icon').dispatchEvent(new Event('input'));
+
+            // Warning elements
+            let warningContainer = document.getElementById('entry-no-projects-warning');
+            if (!warningContainer) {
+                warningContainer = document.createElement('div');
+                warningContainer.id = 'entry-no-projects-warning';
+                warningContainer.className = 'bg-[#ffdad6] text-[#93000a] p-4 rounded-xl border border-[#ba1a1a] mb-4 flex flex-col gap-3 hidden';
+                form.parentNode.insertBefore(warningContainer, form);
+            }
+
+            if (!projects || projects.length === 0) {
+                // Show warning, hide form fields
+                warningContainer.innerHTML = `
+                    <div class="flex items-start gap-2.5 text-left">
+                        <span class="material-symbols-outlined text-error mt-0.5">warning</span>
+                        <div>
+                            <p class="font-bold text-sm">No Projects Available</p>
+                            <p class="text-xs opacity-90 mt-1">You must create at least one project before you can write and categorize timeline entries.</p>
+                        </div>
+                    </div>
+                    <button type="button" onclick="closeNewEntryModal(); openFormModal();" class="mt-2 bg-[#ba1a1a] hover:bg-[#93000a] text-white py-2 px-4 rounded-full font-bold text-xs self-start transition-colors active-scale">
+                        Create a Project
+                    </button>
+                `;
+                warningContainer.classList.remove('hidden');
+                form.classList.add('hidden');
+            } else {
+                warningContainer.classList.add('hidden');
+                form.classList.remove('hidden');
+
+                // Bind projects
+                projects.forEach(p => {
+                    const opt = document.createElement('option');
+                    opt.value = p.id;
+                    opt.innerText = p.title;
+                    select.appendChild(opt);
+                });
+
+                // Preselect project if passed
+                if (preselectedProjectId) {
+                    select.value = preselectedProjectId;
+                }
+            }
+
+            toggleEntryNoteField();
+
+            const modal = document.getElementById('new-entry-modal');
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                modal.firstElementChild.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closeNewEntryModal() {
+            const modal = document.getElementById('new-entry-modal');
+            const child = modal.firstElementChild;
+
+            modal.classList.add('opacity-0');
+            child.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+
+            // Clean actions and projectId from URL
+            const url = new URL(window.location.href);
+            url.searchParams.delete('action');
+            url.searchParams.delete('projectId');
+            window.history.pushState({}, '', url);
+        }
+
+        function toggleEntryNoteField() {
+            const isNote = document.getElementById('entry-isnote').checked;
+            const imageGroup = document.getElementById('entry-image-group');
+            if (isNote) {
+                imageGroup.classList.add('hidden');
+            } else {
+                imageGroup.classList.remove('hidden');
+            }
+        }
+
+        async function saveNewEntry(event) {
+            event.preventDefault();
+            
+            // Visual loading state
+            const saveBtn = event.target.querySelector('button[type="submit"]');
+            const originalText = saveBtn.innerText;
+            saveBtn.disabled = true;
+            saveBtn.innerHTML = `
+                <span class="inline-flex items-center gap-2">
+                    <span class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+                    Syncing...
+                </span>
+            `;
+
+            const selectedProjectId = document.getElementById('entry-project-select').value;
+            const isNote = document.getElementById('entry-isnote').checked;
+
+            const milestone = {
+                title: document.getElementById('entry-title').value,
+                type: document.getElementById('entry-type').value,
+                date: document.getElementById('entry-date').value,
+                label: document.getElementById('entry-label').value,
+                icon: document.getElementById('entry-icon').value,
+                isNote: isNote,
+                isDraft: document.getElementById('entry-isdraft').checked,
+                description: document.getElementById('entry-desc').value,
+            };
+
+            if (!isNote) {
+                milestone.imageUrl = document.getElementById('entry-image').value || "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80";
+            }
+
+            const project = db.getProjectById(selectedProjectId);
+            if (project) {
+                if (!project.milestones) {
+                    project.milestones = [];
+                }
+                project.milestones.push(milestone);
+                // Await completion so the page navigation does not cancel the network request
+                await db.updateProject(selectedProjectId, { milestones: project.milestones });
+            }
+
+            closeNewEntryModal();
+            window.location.href = `project-detail.html?id=${selectedProjectId}`;
+        }
+
+        // Option Chips Dynamic Setup
+        const CHIP_OPTIONS = {
+            type: db.getCategories(),
+            label: ['Written Log', 'Launch', 'Milestone', 'Foundation', 'Capture', 'Completed'],
+            icon: ['history_edu', 'flag', 'star', 'grid_view', 'photo_camera', 'check_circle']
+        };
+
+        const SMART_PRESETS = {
+            'Note': { label: 'Written Log', icon: 'history_edu', isNote: true }
+        };
+
+        function initChipsToggles() {
+            // Refresh categories dynamically
+            CHIP_OPTIONS.type = db.getCategories();
+
+            // Milestone Modal Setup
+            setupChips('ms-type-chips', 'ms-type', CHIP_OPTIONS.type, false, (val) => {
+                applySmartPreset('ms', val);
+            });
+            setupChips('ms-label-chips', 'ms-label', CHIP_OPTIONS.label, false);
+            setupChips('ms-icon-chips', 'ms-icon', CHIP_OPTIONS.icon, true);
+
+            // New Entry Modal Setup
+            setupChips('entry-type-chips', 'entry-type', CHIP_OPTIONS.type, false, (val) => {
+                applySmartPreset('entry', val);
+            });
+            setupChips('entry-label-chips', 'entry-label', CHIP_OPTIONS.label, false);
+            setupChips('entry-icon-chips', 'entry-icon', CHIP_OPTIONS.icon, true);
+        }
+
+        function applySmartPreset(prefix, typeVal) {
+            const preset = SMART_PRESETS[typeVal];
+            if (preset) {
+                const labelInput = document.getElementById(`${prefix}-label`);
+                const iconInput = document.getElementById(`${prefix}-icon`);
+                const checkbox = document.getElementById(`${prefix}-isnote`);
+                
+                if (labelInput) {
+                    labelInput.value = preset.label;
+                    labelInput.dispatchEvent(new Event('input'));
+                }
+                if (iconInput) {
+                    iconInput.value = preset.icon;
+                    iconInput.dispatchEvent(new Event('input'));
+                }
+                if (checkbox) {
+                    checkbox.checked = preset.isNote;
+                    // Trigger checkbox change handler
+                    if (prefix === 'ms') {
+                        toggleMilestoneNoteField();
+                    } else {
+                        toggleEntryNoteField();
+                    }
+                }
+            }
+        }
+
+        function setupChips(containerId, inputId, options, isIconField = false, onSelectCallback = null) {
+            const container = document.getElementById(containerId);
+            const input = document.getElementById(inputId);
+            if (!container || !input) return;
+
+            container.innerHTML = '';
+            
+            const isTypeChips = containerId.toLowerCase().includes('type');
+
+            options.forEach(opt => {
+                const btn = document.createElement('button');
+                btn.type = 'button';
+                btn.className = 'chip-btn px-2.5 py-1 text-[11px] rounded-full border transition-all duration-200 active-scale flex items-center gap-1';
+                
+                if (isIconField) {
+                    btn.innerHTML = `<span class="material-symbols-outlined text-[13px]">${opt}</span><span class="text-[9px] font-semibold">${opt}</span>`;
+                } else {
+                    btn.innerText = opt;
+                    
+                    if (isTypeChips && opt !== 'Note') {
+                        const delSpan = document.createElement('span');
+                        delSpan.className = 'ml-1.5 hover:text-red-600 font-bold px-1 rounded-full hover:bg-black/10 transition-colors text-[10px] flex items-center justify-center h-3 w-3';
+                        delSpan.innerText = '×';
+                        delSpan.title = `Delete Category "${opt}"`;
+                        delSpan.addEventListener('click', (e) => {
+                            e.stopPropagation();
+                            if (confirm(`Are you sure you want to delete category "${opt}"?`)) {
+                                db.deleteCategory(opt);
+                                CHIP_OPTIONS.type = db.getCategories();
+                                setupChips(containerId, inputId, CHIP_OPTIONS.type, isIconField, onSelectCallback);
+                                if (input.value === opt) {
+                                    input.value = 'Note';
+                                    input.dispatchEvent(new Event('input'));
+                                }
+                            }
+                        });
+                        btn.appendChild(delSpan);
+                    }
+                }
+
+                btn.addEventListener('click', () => {
+                    input.value = opt;
+                    updateChipsHighlight(container, opt);
+                    input.dispatchEvent(new Event('input'));
+                    if (onSelectCallback) {
+                        onSelectCallback(opt);
+                    }
+                });
+                container.appendChild(btn);
+            });
+
+            if (isTypeChips) {
+                const addBtn = document.createElement('button');
+                addBtn.type = 'button';
+                addBtn.className = 'px-2.5 py-1 text-[11px] rounded-full border border-dashed border-primary text-primary bg-transparent hover:bg-green-light transition-all duration-200 flex items-center gap-1 active-scale font-semibold';
+                addBtn.innerHTML = '<span class="material-symbols-outlined text-[12px] font-bold">add</span>Add Custom';
+                addBtn.addEventListener('click', () => {
+                    const newCat = prompt("Enter new category / entry type name:");
+                    if (newCat && newCat.trim()) {
+                        const clean = newCat.trim();
+                        const added = db.addCategory(clean);
+                        if (added) {
+                            CHIP_OPTIONS.type = db.getCategories();
+                            setupChips(containerId, inputId, CHIP_OPTIONS.type, isIconField, onSelectCallback);
+                            input.value = clean;
+                            input.dispatchEvent(new Event('input'));
+                            if (onSelectCallback) {
+                                onSelectCallback(clean);
+                            }
+                        } else {
+                            alert("Category already exists or is invalid.");
+                        }
+                    }
+                });
+                container.appendChild(addBtn);
+            }
+
+            input.addEventListener('input', () => {
+                updateChipsHighlight(container, input.value);
+            });
+
+            updateChipsHighlight(container, input.value);
+        }
+
+        function updateChipsHighlight(container, value) {
+            const buttons = container.querySelectorAll('.chip-btn');
+            buttons.forEach(btn => {
+                let btnVal = '';
+                if (btn.querySelector('.material-symbols-outlined')) {
+                    const textSpan = btn.querySelector('span:not(.material-symbols-outlined)');
+                    btnVal = textSpan ? textSpan.textContent.trim() : (btn.lastElementChild ? btn.lastElementChild.textContent.trim() : '');
+                } else {
+                    btnVal = btn.textContent.replace('×', '').trim();
+                }
+                
+                if (btnVal.toLowerCase() === (value || '').trim().toLowerCase()) {
+                    btn.className = 'chip-btn px-2.5 py-1 text-[11px] rounded-full border transition-all duration-200 active-scale flex items-center gap-1 bg-[#006c47] text-white border-[#006c47] shadow-sm font-semibold';
+                } else {
+                    btn.className = 'chip-btn px-2.5 py-1 text-[11px] rounded-full border transition-all duration-200 active-scale flex items-center gap-1 bg-[#faf6ee] text-primary border-[#dcdad5] hover:bg-[#eae6de] font-normal';
+                }
+            });
+        }
+
+        function insertFormatting(textareaId, prefix, suffix) {
+            const textarea = document.getElementById(textareaId);
+            if (!textarea) return;
+            
+            const start = textarea.selectionStart;
+            const end = textarea.selectionEnd;
+            const text = textarea.value;
+            const selectedText = text.substring(start, end);
+            
+            const replacement = prefix + selectedText + suffix;
+            textarea.value = text.substring(0, start) + replacement + text.substring(end);
+            
+            textarea.focus();
+            textarea.setSelectionRange(start + prefix.length, start + prefix.length + selectedText.length);
+            textarea.dispatchEvent(new Event('input'));
+        }
+
+        function toggleMobileMenu() {
+            const nav = document.getElementById('sidebar-nav');
+            const bottomSec = document.getElementById('sidebar-bottom-sec');
+            const toggleIcon = document.querySelector('#mobile-menu-toggle span');
+            
+            if (nav.classList.contains('hidden')) {
+                nav.classList.remove('hidden');
+                nav.classList.add('flex');
+                if (bottomSec) {
+                    bottomSec.classList.remove('hidden');
+                    bottomSec.classList.add('flex');
+                }
+                if (toggleIcon) toggleIcon.innerText = 'close';
+            } else {
+                nav.classList.add('hidden');
+                nav.classList.remove('flex');
+                if (bottomSec) {
+                    bottomSec.classList.add('hidden');
+                    bottomSec.classList.remove('flex');
+                }
+                if (toggleIcon) toggleIcon.innerText = 'menu';
+            }
+        }
+    </script>
+</body>
+</html>

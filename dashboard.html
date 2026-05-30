@@ -1,0 +1,592 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>MELANIE'S ARCHIVE | Studio Overview</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700;800;900&family=Literata:wght@600;700&family=Karla&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="style.css" rel="stylesheet"/>
+    <script id="tailwind-config">
+      tailwind.config = {
+        darkMode: "class",
+        theme: {
+          extend: {
+            "colors": {
+                "surface-container-highest": "#e0e3de",
+                "rewards-slate": "#33433d",
+                "on-primary-fixed-variant": "#005235",
+                "background": "#f7faf5",
+                "green-uplift": "#2b5148",
+                "primary": "#00482f",
+                "green-light": "#d4e9e2",
+                "primary-fixed": "#a2f3c8",
+                "secondary-fixed-dim": "#7cd9a5",
+                "on-surface-variant": "#3f4943",
+                "gold": "#cba258",
+                "on-tertiary-fixed-variant": "#314c44",
+                "gold-lightest": "#faf6ee",
+                "on-surface": "#181d1a",
+                "surface-container-high": "#e6e9e4",
+                "tertiary-fixed": "#cbe9df",
+                "inverse-on-surface": "#eef2ec",
+                "surface-container-low": "#f1f5ef",
+                "on-error": "#ffffff",
+                "tertiary": "#28433c",
+                "on-secondary": "#ffffff",
+                "error-container": "#ffdad6",
+                "on-background": "#181d1a",
+                "on-primary-fixed": "#002113",
+                "on-secondary-fixed": "#002112",
+                "on-primary-container": "#8bdbb1",
+                "surface-container": "#ebefea",
+                "primary-fixed-dim": "#87d7ad",
+                "gold-light": "#dfc49d",
+                "primary-container": "#006241",
+                "secondary-container": "#97f6c0",
+                "surface-dim": "#d7dbd6",
+                "secondary": "#006c44",
+                "on-secondary-fixed-variant": "#005232",
+                "ceramic": "#edebe9",
+                "tertiary-container": "#405b53",
+                "surface": "#f7faf5",
+                "neutral-cool": "#f9f9f9",
+                "surface-tint": "#146b4a",
+                "inverse-primary": "#87d7ad",
+                "tertiary-fixed-dim": "#afcdc3",
+                "on-secondary-container": "#007349",
+                "surface-container-lowest": "#ffffff",
+                "error": "#ba1a1a",
+                "on-tertiary": "#ffffff",
+                "secondary-fixed": "#97f6c0",
+                "on-tertiary-fixed": "#04201a",
+                "surface-variant": "#e0e3de",
+                "on-error-container": "#93000a",
+                "canvas-warm": "#f2f0eb",
+                "on-primary": "#ffffff",
+                "surface-bright": "#f7faf5",
+                "inverse-surface": "#2d312e",
+                "outline-variant": "#bec9c0",
+                "on-tertiary-container": "#b3d1c7",
+                "outline": "#6f7a72"
+            },
+            "borderRadius": {
+                "DEFAULT": "0.25rem",
+                "lg": "0.5rem",
+                "xl": "0.75rem",
+                "full": "9999px"
+            },
+            "spacing": {
+                "space-2": "0.8rem",
+                "space-6": "4.8rem",
+                "space-4": "2.4rem",
+                "space-3": "1.6rem",
+                "space-1": "0.4rem",
+                "space-7": "6.4rem",
+                "base": "1.6rem",
+                "space-5": "3.2rem"
+            },
+            "fontFamily": {
+                "headline-lg": ["Inter"],
+                "body-lg": ["Inter"],
+                "display-lg": ["Inter"],
+                "script-touch": ["karla"],
+                "body-md": ["Inter"],
+                "label-md": ["Inter"],
+                "headline-md": ["Inter"],
+                "headline-serif": ["literata"]
+            },
+            "fontSize": {
+                "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.16px", "fontWeight": "700"}],
+                "body-lg": ["19px", {"lineHeight": "1.5", "letterSpacing": "-0.16px", "fontWeight": "400"}],
+                "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.16px", "fontWeight": "700"}],
+                "script-touch": ["18px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "-0.16px", "fontWeight": "400"}],
+                "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.16px", "fontWeight": "600"}],
+                "headline-serif": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}]
+            }
+          }
+        }
+      }
+    </script>
+    <style>
+        .material-symbols-outlined {
+            font-variation-settings: 'FILL' 0, 'wght' 400, 'GRAD' 0, 'opsz' 24;
+            vertical-align: middle;
+        }
+        .soft-card-shadow {
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+        }
+    </style>
+    <!-- Dynamic Session Guard -->
+    <script src="db.js"></script>
+    <script>
+        if (!db.isAuthenticated()) {
+            window.location.href = 'login.html?redirect=dashboard.html';
+        }
+    </script>
+</head>
+<body class="bg-canvas-warm text-on-surface font-body-md selection:bg-primary-fixed selection:text-on-primary-fixed page-fade-in flex flex-col md:flex-row h-screen overflow-hidden">
+    <!-- SideNavBar -->
+    <aside class="w-full md:w-64 h-auto md:h-screen bg-canvas-warm border-b md:border-r border-ceramic flex flex-col py-4 px-4 md:py-space-4 md:px-space-2 flex-shrink-0 overflow-y-auto custom-scrollbar z-50">
+        <div class="flex md:flex-col justify-between items-center md:items-start mb-0 md:mb-space-6 cursor-pointer w-full" onclick="window.location.href='index.html'">
+            <div class="ml-2">
+                <h1 class="font-headline-lg text-xl md:text-headline-lg tracking-tighter text-primary leading-tight">MELANIE'S ARCHIVE</h1>
+                <p class="font-label-md text-xs md:text-label-md text-on-surface-variant opacity-70">Creative Archive</p>
+            </div>
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-toggle" onclick="toggleMobileMenu()" class="md:hidden p-2 hover:bg-ceramic rounded-full active-scale flex items-center justify-center">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
+        <nav id="sidebar-nav" class="hidden md:flex flex-col md:flex-grow space-y-2 md:space-y-space-1 w-full mt-4 md:mt-0 pb-4 md:pb-0">
+            <a class="flex items-center gap-space-3 py-space-2 rounded-lg text-on-surface-variant pl-4 hover:bg-ceramic transition-colors active-scale" href="index.html">
+                <span class="material-symbols-outlined">dashboard</span>
+                <span class="font-label-md text-label-md">Overview</span>
+            </a>
+            <a class="flex items-center gap-space-3 py-space-2 rounded-lg text-on-surface-variant pl-4 hover:bg-ceramic transition-colors active-scale" href="manage-projects.html">
+                <span class="material-symbols-outlined">folder_open</span>
+                <span class="font-label-md text-label-md">Projects</span>
+            </a>
+            <a class="flex items-center gap-space-3 py-space-2 rounded-lg text-primary font-bold border-r-4 border-primary pl-4 hover:bg-ceramic transition-colors active-scale" href="dashboard.html">
+                <span class="material-symbols-outlined">settings</span>
+                <span class="font-label-md text-label-md">Admin Panel</span>
+            </a>
+        </nav>
+        <div id="sidebar-bottom-sec" class="hidden md:flex flex-col mt-auto w-full px-2 pt-4 border-t border-ceramic md:border-none">
+            <button onclick="window.location.href='manage-projects.html?action=new-entry'" class="w-full bg-primary-container text-on-primary py-space-3 rounded-full flex items-center justify-center gap-space-2 active-scale transition-transform">
+                <span class="material-symbols-outlined">add</span>
+                <span class="font-label-md text-label-md">New Entry</span>
+            </button>
+            <div class="mt-space-4 w-full">
+                <div class="flex items-center justify-between w-full gap-space-2 px-space-2">
+                    <div class="flex items-center gap-space-2">
+                        <img alt="Melanie O." class="w-8 h-8 rounded-full border border-outline-variant" src="https://www.applesfromny.com/wp-content/uploads/2020/05/20Ounce_NYAS-Apples2.png"/>
+                        <div>
+                            <p class="font-label-md text-label-md leading-none">Melanie O.</p>
+                            <p class="text-[10px] text-on-surface-variant opacity-60">Director</p>
+                        </div>
+                    </div>
+                    <button onclick="handleLogout()" class="p-1 hover:bg-surface-container rounded-full text-error transition-colors" title="Log Out">
+                        <span class="material-symbols-outlined text-[18px]">logout</span>
+                    </button>
+                </div>
+            </div>
+        </div>
+    </aside>
+
+    <!-- Main Content -->
+    <main class="flex-grow flex flex-col h-screen overflow-y-auto custom-scrollbar">
+        <!-- TopNavBar -->
+        <header class="bg-canvas-warm shadow-sm sticky top-0 z-40 flex justify-between items-center w-full px-space-4 py-space-2 border-b border-outline-variant">
+            <div class="flex items-center space-x-4">
+                <h2 class="font-headline-md text-headline-md tracking-tight text-primary font-bold">Studio Overview</h2>
+            </div>
+            <div class="flex items-center space-x-3">
+                <div class="hidden sm:flex items-center bg-white rounded-full px-4 py-2 border border-outline-variant">
+                    <span class="material-symbols-outlined text-outline" data-icon="search">search</span>
+                    <input id="dash-search" class="bg-transparent border-none focus:ring-0 text-sm w-48 ml-2 focus:outline-none" placeholder="Search entries..." type="text"/>
+                </div>
+                <button class="p-2 text-on-surface-variant hover:bg-surface-container-high transition-colors rounded-full active:scale-95" onclick="alert('No notifications')">
+                    <span class="material-symbols-outlined" data-icon="notifications">notifications</span>
+                </button>
+                <div class="p-1 flex items-center space-x-2 hover:bg-surface-container-high transition-colors rounded-full pr-3">
+                    <img id="admin-user-avatar" class="w-8 h-8 rounded-full border border-primary-fixed" src="https://www.applesfromny.com/wp-content/uploads/2020/05/20Ounce_NYAS-Apples2.png" alt="Admin Profile"/>
+                    <span id="admin-user-name" class="font-label-md text-sm text-primary font-bold">Melanie O.</span>
+                </div>
+            </div>
+        </header>
+
+        <div class="p-space-4 md:p-space-6 space-y-space-5 max-w-7xl mx-auto w-full">
+            <!-- Hero Stat Grid -->
+            <section class="grid grid-cols-1 md:grid-cols-3 gap-space-4">
+                <!-- Published Projects -->
+                <div class="bg-surface-container-lowest rounded-xl p-space-4 soft-card-shadow flex items-start justify-between border-b-4 border-secondary transition-all hover:-translate-y-1">
+                    <div>
+                        <p class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant mb-1">Published Projects</p>
+                        <h3 id="count-published" class="font-headline-lg text-headline-lg text-primary font-bold">0</h3>
+                        <div class="mt-2 flex items-center text-secondary space-x-1">
+                            <span class="material-symbols-outlined text-sm" data-icon="trending_up">trending_up</span>
+                            <span class="text-xs font-bold">+12% this month</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-secondary-container rounded-full text-on-secondary-container flex items-center justify-center">
+                        <span class="material-symbols-outlined" data-icon="auto_awesome">auto_awesome</span>
+                    </div>
+                </div>
+                <!-- Drafts -->
+                <div onclick="openDraftsSection()" class="bg-surface-container-lowest rounded-xl p-space-4 soft-card-shadow flex items-start justify-between border-b-4 border-gold transition-all hover:-translate-y-1 cursor-pointer hover:shadow-lg">
+                    <div>
+                        <p class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant mb-1">Drafts</p>
+                        <h3 id="count-drafts" class="font-headline-lg text-headline-lg text-tertiary font-bold">0</h3>
+                        <div class="mt-2 flex items-center text-[#b06000] space-x-1">
+                            <span class="material-symbols-outlined text-sm" data-icon="manage_accounts">manage_accounts</span>
+                            <span class="text-xs font-bold uppercase tracking-wider">Manage Drafts</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-gold-lightest rounded-full text-gold flex items-center justify-center">
+                        <span class="material-symbols-outlined" data-icon="edit_note">edit_note</span>
+                    </div>
+                </div>
+                <!-- Private Archives -->
+                <div class="bg-surface-container-lowest rounded-xl p-space-4 soft-card-shadow flex items-start justify-between border-b-4 border-primary transition-all hover:-translate-y-1">
+                    <div>
+                        <p class="font-label-md text-label-md uppercase tracking-widest text-on-surface-variant mb-1">Private Archives</p>
+                        <h3 id="count-archives" class="font-headline-lg text-headline-lg text-primary font-bold">0</h3>
+                        <div class="mt-2 flex items-center text-primary space-x-1">
+                            <span class="material-symbols-outlined text-sm" data-icon="lock">lock</span>
+                            <span class="text-xs font-bold">Secured Vault</span>
+                        </div>
+                    </div>
+                    <div class="p-3 bg-primary-fixed rounded-full text-primary flex items-center justify-center">
+                        <span class="material-symbols-outlined" data-icon="inventory">inventory</span>
+                    </div>
+                </div>
+            </section>
+
+
+            <!-- Recent Entries Table -->
+            <section class="bg-surface-container-lowest rounded-xl soft-card-shadow overflow-hidden border border-outline-variant">
+                <div class="px-space-4 py-space-3 border-b border-outline-variant flex justify-between items-center bg-white">
+                    <h4 class="font-headline-md text-headline-md text-primary font-bold text-lg">Recent Entries</h4>
+                    <button onclick="window.location.href='manage-projects.html'" class="text-secondary font-bold text-sm hover:underline">View All</button>
+                </div>
+                <div class="overflow-x-auto">
+                    <table class="w-full text-left">
+                        <thead class="bg-surface-container-low">
+                            <tr>
+                                <th class="px-space-4 py-3 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant border-b border-outline-variant">Entry / Project</th>
+                                <th class="px-space-4 py-3 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant border-b border-outline-variant">Date</th>
+                                <th class="px-space-4 py-3 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant border-b border-outline-variant">Type</th>
+                                <th class="px-space-4 py-3 font-label-md text-label-md uppercase tracking-widest text-on-surface-variant border-b border-outline-variant">Badge Label</th>
+                                <th class="px-space-4 py-3 border-b border-outline-variant"></th>
+                            </tr>
+                        </thead>
+                        <tbody id="recent-projects-tbody" class="divide-y divide-outline-variant">
+                            <!-- Rendered dynamically by JS -->
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <!-- Footer -->
+        <footer class="bg-primary dark:bg-on-primary-fixed w-full py-space-6 px-space-4 flex flex-col md:flex-row justify-between items-center mt-auto border-t border-[#003823]">
+            <div class="flex flex-col items-center md:items-start mb-4 md:mb-0">
+                <span class="font-headline-serif text-headline-serif text-gold-lightest mb-1 text-2xl font-bold">MELANIE'S ARCHIVE</span>
+                <p class="font-body-md text-body-md text-surface-variant opacity-70">© 2026 MELANIE'S ARCHIVE Creative Labs</p>
+            </div>
+            <div class="flex space-x-6">
+                <a class="text-surface-variant hover:text-gold-light transition-colors font-body-md" href="index.html">Live Site</a>
+                <a class="text-surface-variant hover:text-gold-light transition-colors font-body-md" href="manage-projects.html">Projects</a>
+                <a class="text-surface-variant hover:text-gold-light transition-colors font-body-md" href="#" onclick="alert('Help documentation is stored in workspace.')">Help</a>
+            </div>
+        </footer>
+    </main>
+
+<!-- Floating "Frap" CTA -->
+<button onclick="window.location.href='manage-projects.html?action=new-entry'" class="fixed bottom-8 right-8 w-14 h-14 rounded-full bg-secondary hover:bg-[#005e3a] text-white frap-shadow flex items-center justify-center transition-all hover:scale-110 active:scale-95 z-50" title="New Entry">
+    <span class="material-symbols-outlined text-3xl" data-icon="stylus" style="font-variation-settings: 'FILL' 1;">stylus</span>
+</button>
+
+<script>
+    document.addEventListener('DOMContentLoaded', () => {
+        loadDashboardData();
+        setupSearch();
+    });
+
+    window.loadDashboardStats = () => {
+        if (typeof loadDashboardData === 'function') loadDashboardData();
+    };
+
+    function handleLogout() {
+        db.logout();
+        window.location.href = 'login.html';
+    }
+
+    function setupSearch() {
+        const searchInput = document.getElementById('dash-search');
+        searchInput.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter') {
+                window.location.href = `index.html?search=${encodeURIComponent(searchInput.value)}&mode=entries`;
+            }
+        });
+    }
+
+    function loadDashboardData() {
+        const user = db.getCurrentUser();
+        document.getElementById('admin-user-name').innerText = user.name;
+
+        const projects = db.getProjects();
+
+        // Count logic:
+        // - Published: status is "Ongoing" or "Featured" or "Active"
+        // - Drafts: Count of all milestones/entries with isDraft = true across all projects
+        // - Archives: status is "Archived"
+        const publishedCount = projects.filter(p => p.status === 'Ongoing' || p.status === 'Featured' || p.status === 'Active').length;
+        
+        let draftsCount = 0;
+        projects.forEach(p => {
+            if (p.milestones && Array.isArray(p.milestones)) {
+                p.milestones.forEach(m => {
+                    if (m.isDraft) draftsCount++;
+                });
+            }
+        });
+
+        const archivesCount = projects.filter(p => p.status === 'Archived').length;
+
+        document.getElementById('count-published').innerText = publishedCount;
+        document.getElementById('count-drafts').innerText = draftsCount;
+        document.getElementById('count-archives').innerText = archivesCount;
+
+        // Recent Entries Table (show up to 4 recent milestones/entries across all projects)
+        const tbody = document.getElementById('recent-projects-tbody');
+        tbody.innerHTML = '';
+
+        // Gather all milestones from all projects (excluding drafts)
+        let allMilestones = [];
+        projects.forEach(p => {
+            if (p.milestones && Array.isArray(p.milestones)) {
+                p.milestones.forEach(m => {
+                    if (m.isDraft) return; // Skip drafts from dashboard recent entries table
+                    allMilestones.push({
+                        ...m,
+                        projectId: p.id,
+                        projectTitle: p.title
+                    });
+                });
+            }
+        });
+
+        // Sort milestones by date descending
+        allMilestones.sort((a, b) => {
+            const dateA = Date.parse(a.date) || 0;
+            const dateB = Date.parse(b.date) || 0;
+            return dateB - dateA; // Newest first
+        });
+
+        const recentEntries = allMilestones.slice(0, 4);
+
+        if (recentEntries.length === 0) {
+            tbody.innerHTML = `
+                <tr>
+                    <td colspan="5" class="px-space-4 py-8 text-center text-on-surface-variant font-body-md">
+                        <span class="material-symbols-outlined text-4xl mb-2 text-outline">history_edu</span>
+                        <p>No timeline entries created yet.</p>
+                        <button onclick="window.location.href='manage-projects.html?action=new-entry'" class="mt-3 bg-secondary hover:bg-[#005e3a] text-white py-1.5 px-4 rounded-full font-bold text-xs transition-colors active-scale">
+                            Write Your First Entry
+                        </button>
+                    </td>
+                </tr>
+            `;
+            return;
+        }
+
+        recentEntries.forEach(m => {
+            const tr = document.createElement('tr');
+            tr.className = 'hover:bg-surface-container-low transition-colors group cursor-pointer';
+            tr.onclick = () => window.location.href = `manage-projects.html?action=edit&id=${m.projectId}`;
+
+            const iconName = m.icon || 'history_edu';
+            const badgeLabel = m.label || 'Written Log';
+            const dateStr = m.editedDate ? `${m.date} (Edited: ${m.editedDate})` : (m.date || 'Jan 01, 2026');
+            const typeVal = m.type || 'Note';
+
+            // Distinct badge colors for types
+            let badgeColor = 'bg-[#faf6ee] text-primary border border-outline-variant';
+            if (typeVal.toLowerCase() === 'note') badgeColor = 'bg-[#faf6ee] text-[#006c47] border border-[#006c47]/30';
+            else if (typeVal.toLowerCase() === 'video') badgeColor = 'bg-[#e8f0fe] text-[#1a73e8] border border-[#1a73e8]/30';
+            else if (typeVal.toLowerCase() === 'sketch') badgeColor = 'bg-[#fef7e0] text-[#b06000] border border-[#b06000]/30';
+            else if (typeVal.toLowerCase() === 'photo') badgeColor = 'bg-[#fce8e6] text-[#c5221f] border border-[#c5221f]/30';
+            else if (typeVal.toLowerCase() === 'design') badgeColor = 'bg-[#e6f4ea] text-[#137333] border border-[#137333]/30';
+            else if (typeVal.toLowerCase() === 'architecture') badgeColor = 'bg-[#f3e8fd] text-[#7627cd] border border-[#7627cd]/30';
+
+            tr.innerHTML = `
+                <td class="px-space-4 py-4 flex items-center space-x-3">
+                    <div class="w-10 h-10 rounded-full bg-green-light flex items-center justify-center text-primary">
+                        <span class="material-symbols-outlined text-lg">${iconName}</span>
+                    </div>
+                    <div>
+                        <p class="font-bold text-on-surface leading-tight">${m.title}</p>
+                        <p class="text-xs text-outline font-semibold mt-0.5">Project: ${m.projectTitle}</p>
+                    </div>
+                </td>
+                <td class="px-space-4 py-4 text-sm font-semibold text-on-surface-variant">${dateStr}</td>
+                <td class="px-space-4 py-4">
+                    <span class="px-3 py-1 ${badgeColor} text-[10px] uppercase font-bold tracking-wider rounded-full">${typeVal}</span>
+                </td>
+                <td class="px-space-4 py-4 text-sm text-on-surface-variant">
+                    <div class="flex items-center gap-1.5 font-medium">
+                        <span class="material-symbols-outlined text-base text-outline">${iconName}</span>
+                        <span>${badgeLabel}</span>
+                    </div>
+                </td>
+                <td class="px-space-4 py-4 text-right">
+                    <button class="opacity-0 group-hover:opacity-100 transition-opacity p-1.5 text-on-surface-variant hover:text-primary active-scale">
+                        <span class="material-symbols-outlined text-lg">edit</span>
+                    </button>
+                </td>
+            `;
+            tbody.appendChild(tr);
+        });
+    }
+
+    // Drafts Console controllers
+    function openDraftsSection() {
+        const modal = document.getElementById('drafts-modal');
+        const listContainer = document.getElementById('drafts-list-container');
+        listContainer.innerHTML = '';
+
+        const projects = db.getProjects();
+        let drafts = [];
+
+        projects.forEach(p => {
+            if (p.milestones && Array.isArray(p.milestones)) {
+                p.milestones.forEach((m, index) => {
+                    if (m.isDraft) {
+                        drafts.push({
+                            ...m,
+                            project: p,
+                            projectId: p.id,
+                            projectTitle: p.title,
+                            originalIndex: index
+                        });
+                    }
+                });
+            }
+        });
+
+        if (drafts.length === 0) {
+            listContainer.innerHTML = `
+                <div class="py-12 text-center text-on-surface-variant">
+                    <span class="material-symbols-outlined text-5xl mb-4 text-outline" style="font-variation-settings: 'FILL' 0;">drafts</span>
+                    <p class="font-body-lg">All caught up! You don't have any drafts.</p>
+                </div>
+            `;
+        } else {
+            drafts.forEach(d => {
+                const item = document.createElement('div');
+                item.className = 'p-5 bg-surface-container-lowest rounded-xl border border-outline-variant hover:border-primary-container transition-all flex flex-col md:flex-row justify-between items-start md:items-center gap-4';
+                
+                const iconName = d.icon || 'history_edu';
+                const badgeLabel = d.label || 'Written Log';
+                const typeVal = d.type || 'Note';
+
+                item.innerHTML = `
+                    <div class="flex items-start gap-3 text-left">
+                        <div class="w-10 h-10 rounded-full bg-gold-lightest text-[#b06000] flex items-center justify-center flex-shrink-0 mt-1">
+                            <span class="material-symbols-outlined text-lg">${iconName}</span>
+                        </div>
+                        <div class="flex-grow">
+                            <h4 class="font-bold text-on-surface text-base leading-tight">${d.title}</h4>
+                            <p class="text-xs text-secondary font-bold uppercase mt-1 tracking-wider">${d.projectTitle}</p>
+                            <p class="text-xs text-on-surface-variant mt-2 line-clamp-2 leading-relaxed">${d.description}</p>
+                            <div class="flex flex-wrap items-center gap-2 mt-3 text-[10px] uppercase font-bold tracking-wider">
+                                <span class="px-2 py-0.5 bg-[#faf6ee] text-[#b06000] border border-[#b06000]/20 rounded-full">${typeVal}</span>
+                                <span class="px-2 py-0.5 bg-ceramic text-outline rounded-full">${badgeLabel}</span>
+                                <span class="text-outline font-semibold lowercase">${d.date}</span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="flex items-center gap-2 w-full md:w-auto flex-shrink-0 border-t border-ceramic md:border-none pt-3 md:pt-0">
+                        <button onclick="publishDraftDirect(this, '${d.projectId}', ${d.originalIndex})" class="flex-grow md:flex-initial bg-primary hover:bg-[#005e3a] text-white py-2 px-4 rounded-full font-bold active-scale transition-transform text-xs uppercase tracking-wider flex items-center justify-center gap-1.5 shadow-sm">
+                            <span class="material-symbols-outlined text-[16px]">publish</span>
+                            Publish
+                        </button>
+                        <a href="project-detail.html?id=${d.projectId}&openEdit=${d.originalIndex}" class="flex-grow md:flex-initial bg-ceramic hover:bg-[#dcdad5] text-on-surface py-2 px-4 rounded-full font-bold active-scale transition-transform text-xs uppercase tracking-wider text-center flex items-center justify-center gap-1.5 border border-outline-variant/40">
+                            <span class="material-symbols-outlined text-[16px]">edit</span>
+                            Edit
+                        </a>
+                    </div>
+                `;
+                listContainer.appendChild(item);
+            });
+        }
+
+        modal.classList.remove('hidden');
+        setTimeout(() => {
+            modal.classList.remove('opacity-0');
+            modal.firstElementChild.classList.remove('scale-95');
+        }, 10);
+    }
+
+    function closeDraftsSection() {
+        const modal = document.getElementById('drafts-modal');
+        const child = modal.firstElementChild;
+        modal.classList.add('opacity-0');
+        child.classList.add('scale-95');
+        setTimeout(() => {
+            modal.classList.add('hidden');
+        }, 300);
+    }
+
+    async function publishDraftDirect(btn, projectId, entryIndex) {
+        const project = db.getProjectById(projectId);
+        if (!project || !project.milestones || !project.milestones[entryIndex]) return;
+
+        btn.disabled = true;
+        const originalText = btn.innerHTML;
+        btn.innerHTML = `
+            <span class="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin"></span>
+        `;
+
+        project.milestones[entryIndex].isDraft = false;
+        
+        // Save
+        await db.updateProject(projectId, { milestones: project.milestones });
+
+        // Refresh stats & list
+        loadDashboardData();
+        openDraftsSection();
+    }
+
+    function toggleMobileMenu() {
+        const nav = document.getElementById('sidebar-nav');
+        const bottomSec = document.getElementById('sidebar-bottom-sec');
+        const toggleIcon = document.querySelector('#mobile-menu-toggle span');
+        
+        if (nav.classList.contains('hidden')) {
+            nav.classList.remove('hidden');
+            nav.classList.add('flex');
+            if (bottomSec) {
+                bottomSec.classList.remove('hidden');
+                bottomSec.classList.add('flex');
+            }
+            if (toggleIcon) toggleIcon.innerText = 'close';
+        } else {
+            nav.classList.add('hidden');
+            nav.classList.remove('flex');
+            if (bottomSec) {
+                bottomSec.classList.add('hidden');
+                bottomSec.classList.remove('flex');
+            }
+            if (toggleIcon) toggleIcon.innerText = 'menu';
+        }
+    }
+</script>
+
+<!-- Drafts Console Slide-Over/Modal -->
+<div id="drafts-modal" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[110] hidden flex items-center justify-center p-4 opacity-0 transition-opacity duration-300" onclick="closeDraftsSection()">
+    <div class="bg-canvas-warm p-8 rounded-2xl max-w-2xl w-full shadow-2xl border border-ceramic transform scale-95 transition-transform duration-300 overflow-y-auto max-h-[85vh] custom-scrollbar" onclick="event.stopPropagation()">
+        <div class="flex justify-between items-center mb-6 border-b border-ceramic pb-4">
+            <div>
+                <h3 class="font-headline-serif text-2xl text-primary font-bold">Drafts Console</h3>
+                <p class="text-xs text-on-surface-variant mt-1 uppercase tracking-wider font-semibold">Manage Melanie's unpublished entries</p>
+            </div>
+            <button type="button" class="p-2 hover:bg-ceramic rounded-full active-scale" onclick="closeDraftsSection()">
+                <span class="material-symbols-outlined">close</span>
+            </button>
+        </div>
+        
+        <div id="drafts-list-container" class="space-y-4">
+            <!-- Loaded dynamically by JS -->
+        </div>
+    </div>
+</div>
+
+</body>
+</html>

@@ -1,0 +1,1059 @@
+<!DOCTYPE html>
+<html class="light" lang="en">
+<head>
+    <meta charset="utf-8"/>
+    <meta content="width=device-width, initial-scale=1.0" name="viewport"/>
+    <title>MELANIE'S ARCHIVE | Learning Journeys</title>
+    <script src="https://cdn.tailwindcss.com?plugins=forms,container-queries"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+    <script src="db.js"></script>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;700&family=Literata:wght@600&family=Karla:wght@400&display=swap" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Material+Symbols+Outlined:wght,FILL@100..700,0..1&display=swap" rel="stylesheet"/>
+    <link href="style.css" rel="stylesheet"/>
+    <script id="tailwind-config">
+        tailwind.config = {
+          darkMode: "class",
+          theme: {
+            extend: {
+              "colors": {
+                      "gold": "#cba258",
+                      "secondary-container": "#97f6c0",
+                      "surface-variant": "#e0e3de",
+                      "surface-container-lowest": "#ffffff",
+                      "surface-container-highest": "#e0e3de",
+                      "canvas-warm": "#f2f0eb",
+                      "surface-container-high": "#e6e9e4",
+                      "secondary": "#006c44",
+                      "surface": "#f7faf5",
+                      "on-primary": "#ffffff",
+                      "inverse-on-surface": "#eef2ec",
+                      "on-primary-container": "#8bdbb1",
+                      "primary": "#00482f",
+                      "error": "#ba1a1a",
+                      "on-error-container": "#93000a",
+                      "outline-variant": "#bec9c0",
+                      "on-secondary-container": "#007349",
+                      "outline": "#6f7a72",
+                      "green-light": "#d4e9e2",
+                      "on-surface": "#181d1a",
+                      "on-tertiary-container": "#b3d1c7",
+                      "on-secondary-fixed": "#002112",
+                      "gold-light": "#dfc49d",
+                      "neutral-cool": "#f9f9f9",
+                      "ceramic": "#edebe9",
+                      "gold-lightest": "#faf6ee",
+                      "surface-tint": "#146b4a",
+                      "on-background": "#181d1a",
+                      "on-primary-fixed": "#002113",
+                      "on-tertiary-fixed": "#04201a",
+                      "surface-bright": "#f7faf5",
+                      "tertiary-fixed-dim": "#afcdc3",
+                      "secondary-fixed": "#97f6c0",
+                      "primary-container": "#006241",
+                      "surface-container-low": "#f1f5ef",
+                      "on-secondary-fixed-variant": "#005232",
+                      "primary-fixed-dim": "#87d7ad",
+                      "inverse-primary": "#87d7ad",
+                      "green-uplift": "#2b5148",
+                      "surface-container": "#ebefea",
+                      "primary-fixed": "#a2f3c8",
+                      "on-tertiary": "#ffffff",
+                      "tertiary-container": "#405b53",
+                      "secondary-fixed-dim": "#7cd9a5",
+                      "inverse-surface": "#2d312e",
+                      "background": "#f7faf5",
+                      "surface-dim": "#d7dbd6",
+                      "on-tertiary-fixed-variant": "#314c44",
+                      "error-container": "#ffdad6",
+                      "rewards-slate": "#33433d",
+                      "on-secondary": "#ffffff",
+                      "on-error": "#ffffff",
+                      "on-primary-fixed-variant": "#005235",
+                      "tertiary": "#28433c",
+                      "tertiary-fixed": "#cbe9df",
+                      "on-surface-variant": "#3f4943"
+              },
+              "borderRadius": {
+                      "DEFAULT": "0.25rem",
+                      "lg": "0.5rem",
+                      "xl": "0.75rem",
+                      "full": "9999px"
+              },
+              "spacing": {
+                      "space-3": "1.6rem",
+                      "space-7": "6.4rem",
+                      "base": "1.6rem",
+                      "space-5": "3.2rem",
+                      "space-1": "0.4rem",
+                      "space-6": "4.8rem",
+                      "space-2": "0.8rem",
+                      "space-4": "2.4rem"
+              },
+              "fontFamily": {
+                      "headline-md": ["Inter"],
+                      "body-md": ["Inter"],
+                      "body-lg": ["Inter"],
+                      "display-lg": ["Inter"],
+                      "headline-serif": ["Literata"],
+                      "label-md": ["Inter"],
+                      "script-touch": ["Karla"],
+                      "headline-lg": ["Inter"]
+              },
+              "fontSize": {
+                      "headline-md": ["24px", {"lineHeight": "1.3", "letterSpacing": "-0.16px", "fontWeight": "600"}],
+                      "body-md": ["16px", {"lineHeight": "1.5", "letterSpacing": "-0.16px", "fontWeight": "400"}],
+                      "body-lg": ["19px", {"lineHeight": "1.5", "letterSpacing": "-0.16px", "fontWeight": "400"}],
+                      "display-lg": ["48px", {"lineHeight": "1.1", "letterSpacing": "-0.16px", "fontWeight": "700"}],
+                      "headline-serif": ["32px", {"lineHeight": "1.2", "fontWeight": "600"}],
+                      "label-md": ["14px", {"lineHeight": "1.2", "letterSpacing": "0.05em", "fontWeight": "600"}],
+                      "script-touch": ["18px", {"lineHeight": "1.2", "fontWeight": "400"}],
+                      "headline-lg": ["32px", {"lineHeight": "1.2", "letterSpacing": "-0.16px", "fontWeight": "700"}]
+              }
+            },
+          },
+        }
+    </script>
+</head>
+<body class="bg-canvas-warm text-on-surface font-body-md page-fade-in flex flex-col md:flex-row h-screen overflow-hidden">
+    <!-- Persistent SideNavBar Shell -->
+    <aside class="w-full md:w-64 h-auto md:h-screen bg-canvas-warm border-b md:border-r border-ceramic flex flex-col py-4 px-4 md:py-space-4 md:px-space-2 flex-shrink-0 overflow-y-auto custom-scrollbar z-50">
+        <div class="flex md:flex-col justify-between items-center md:items-start mb-0 md:mb-space-6 cursor-pointer w-full" onclick="window.location.href='index.html'">
+            <div class="ml-2">
+                <h1 class="font-headline-lg text-xl md:text-headline-lg tracking-tighter text-primary leading-tight">MELANIE'S ARCHIVE</h1>
+                <p class="font-label-md text-xs md:text-label-md text-on-surface-variant opacity-70">Creative Archive</p>
+            </div>
+            <!-- Mobile Menu Toggle -->
+            <button id="mobile-menu-toggle" onclick="toggleMobileMenu()" class="md:hidden p-2 hover:bg-ceramic rounded-full active-scale flex items-center justify-center">
+                <span class="material-symbols-outlined">menu</span>
+            </button>
+        </div>
+        
+        <!-- Sidebar Navigation Container -->
+        <nav id="sidebar-nav" class="hidden md:flex flex-col md:flex-grow space-y-2 md:space-y-space-1 w-full mt-4 md:mt-0 pb-4 md:pb-0">
+            <!-- Loaded dynamically by JS -->
+        </nav>
+        
+        <!-- Bottom Actions & User Profile -->
+        <div id="sidebar-bottom-sec" class="hidden md:flex flex-col mt-auto w-full px-2 pt-4 border-t border-ceramic md:border-none">
+            <button id="sidebar-new-btn" onclick="handleNewEntry()" class="w-full bg-primary-container text-on-primary py-space-3 rounded-full flex items-center justify-center gap-space-2 active-scale transition-transform hidden">
+                <span class="material-symbols-outlined" data-icon="add">add</span>
+                <span class="font-label-md text-label-md">New Entry</span>
+            </button>
+            <div id="user-profile-sec" class="mt-space-4 w-full">
+                <!-- Loaded dynamically by JS -->
+            </div>
+        </div>
+    </aside>
+
+
+    <!-- Main Content Area -->
+    <main class="flex-grow h-screen overflow-y-auto custom-scrollbar py-space-2 px-space-6 md:py-space-3 md:px-space-7 max-w-[1600px]">
+        <!-- Top Header Navigation (Internal) -->
+        <header class="flex justify-between items-center mb-space-3">
+            <div>
+                <span class="font-script-touch text-script-touch text-secondary italic mb-2 block">Curated Collection</span>
+                <h2 class="font-display-lg text-display-lg text-primary-container leading-tight">Learning Journeys &amp; Archives</h2>
+            </div>
+            <div class="flex items-center gap-space-4">
+                <div class="relative hidden lg:block">
+                    <input id="header-search" class="bg-ceramic border-none rounded-full py-2 px-space-4 w-64 focus:ring-2 focus:ring-primary-container font-body-md text-on-surface transition-all duration-300" placeholder="Search archive..." type="text"/>
+                    <span class="material-symbols-outlined absolute right-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+                </div>
+                <button class="p-2 hover:bg-surface-container rounded-full transition-colors active-scale" onclick="alert('No new notifications.')">
+                    <span class="material-symbols-outlined text-primary" data-icon="notifications">notifications</span>
+                </button>
+                <div id="header-profile-sec" class="flex items-center">
+                    <!-- User profile avatar or sign-in loads dynamically -->
+                </div>
+            </div>
+        </header>
+
+        <!-- Dynamic Switcher & Filtering Area -->
+        <div class="mb-space-5">
+            <!-- View Mode Switcher -->
+            <div class="flex items-center justify-start gap-4 mb-6 border-b border-ceramic pb-4">
+                <button id="view-mode-projects-btn" onclick="setViewMode('projects')" class="px-5 py-2.5 rounded-full font-label-md transition-all duration-300 flex items-center gap-2 bg-primary text-white border border-primary active-scale shadow-sm">
+                    <span class="material-symbols-outlined text-[20px]">folder</span>
+                    <span>Browse Projects</span>
+                </button>
+                <button id="view-mode-entries-btn" onclick="setViewMode('entries')" class="px-5 py-2.5 rounded-full font-label-md transition-all duration-300 flex items-center gap-2 border border-outline text-on-surface hover:bg-surface-container-high active-scale">
+                    <span class="material-symbols-outlined text-[20px]">history_edu</span>
+                    <span>Browse All Entries</span>
+                </button>
+            </div>
+
+            <!-- Search and Contextual Filters Panel -->
+            <div class="flex flex-col gap-6">
+                <!-- Search Bar (Shared) -->
+                <div class="relative max-w-md">
+                    <span class="material-symbols-outlined absolute left-3 top-1/2 -translate-y-1/2 text-outline" data-icon="search">search</span>
+                    <input id="gallery-search" class="w-full bg-ceramic border-none rounded-full py-3 pl-10 pr-4 focus:ring-2 focus:ring-primary-container font-body-md text-on-surface placeholder:text-on-surface-variant/60 focus:outline-none transition-all" placeholder="Search projects..." type="text"/>
+                </div>
+
+                <!-- Projects Sub-Filters (only for Projects Mode) -->
+                <div id="projects-filter-panel" class="flex flex-wrap gap-space-2">
+                    <button onclick="setFilter('All')" class="filter-btn px-5 py-2 rounded-full font-label-md transition-all active-scale bg-primary text-white border border-primary">
+                        All Projects
+                    </button>
+                    <button onclick="setFilter('Ongoing')" class="filter-btn px-5 py-2 rounded-full font-label-md transition-all active-scale border border-outline text-on-surface hover:bg-surface-container-high">
+                        Ongoing
+                    </button>
+                    <button onclick="setFilter('Featured')" class="filter-btn px-5 py-2 rounded-full font-label-md transition-all active-scale border border-outline text-on-surface hover:bg-surface-container-high">
+                        Featured
+                    </button>
+                    <button id="filter-archived-btn" onclick="setFilter('Archived')" class="filter-btn px-5 py-2 rounded-full font-label-md transition-all active-scale border border-outline text-on-surface hover:bg-surface-container-high">
+                        Archived
+                    </button>
+                </div>
+
+                <!-- Entries Sub-Filters (only for All Entries Mode - Hidden by default) -->
+                <div id="entries-filter-panel" class="flex flex-col lg:flex-row lg:items-center justify-between gap-space-4 hidden">
+                    <!-- Type Chips -->
+                    <div id="entry-type-filters-container" class="flex flex-wrap items-center gap-2">
+                        <!-- Loaded dynamically via JavaScript -->
+                    </div>
+
+                    <!-- Sort Dropdown -->
+                    <div class="flex items-center gap-3">
+                        <span class="font-label-md text-outline uppercase tracking-wider text-xs">Sort:</span>
+                        <select id="entries-sort-select" onchange="setEntrySort(this.value)" class="bg-ceramic border-none rounded-full py-1.5 px-4 font-label-md text-xs focus:ring-2 focus:ring-primary-container text-on-surface pr-8 focus:outline-none cursor-pointer">
+                            <option value="date-desc">Date (Newest first)</option>
+                            <option value="date-asc">Date (Oldest first)</option>
+                            <option value="title-asc">Title (A-Z)</option>
+                            <option value="title-desc">Title (Z-A)</option>
+                        </select>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Dynamic Masonry Grid (Reused dynamically for Projects or Entries Waterfall) -->
+        <section id="projects-grid" class="w-full">
+            <!-- Rendered by JS -->
+        </section>
+
+        <!-- Pagination Controls -->
+        <div id="projects-pagination" class="mt-space-5 flex justify-center items-center gap-2 hidden"></div>
+
+        <!-- Footer / Pagination -->
+        <footer class="mt-space-7 pt-space-6 border-t border-ceramic flex flex-col md:flex-row justify-between items-center text-on-surface-variant gap-space-4">
+            <p class="font-label-md text-label-md">© 2026 MELANIE'S ARCHIVE. Built with Intention.</p>
+            <div class="flex gap-space-4">
+                <a class="font-label-md hover:text-primary transition-colors" href="#">Privacy</a>
+                <a class="font-label-md hover:text-primary transition-colors" href="#">Contact</a>
+                <a class="font-label-md hover:text-primary transition-colors" href="#">Instagram</a>
+            </div>
+        </footer>
+    </main>
+
+    <!-- Post Detail Overlay Modal -->
+    <div id="post-modal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-[100] hidden flex items-center justify-center p-4 transition-opacity duration-300 opacity-0" onclick="closePostModal()">
+        <div class="bg-canvas-warm rounded-2xl max-w-2xl w-full shadow-2xl border border-ceramic transform scale-95 transition-transform duration-300 overflow-y-auto max-h-[90vh] custom-scrollbar" onclick="event.stopPropagation()">
+            <div class="p-6 md:p-8">
+                <div class="flex justify-between items-center mb-6">
+                    <div class="flex flex-wrap items-center gap-2">
+                        <span id="modal-post-type" class="bg-primary-container text-white px-3 py-1 rounded-full text-xs font-bold uppercase tracking-widest">Type</span>
+                        <span id="modal-project-title" class="text-xs font-semibold text-outline px-2.5 py-1 bg-ceramic rounded-full uppercase tracking-wider">Project</span>
+                    </div>
+                    <button class="p-2 hover:bg-ceramic rounded-full active-scale" onclick="closePostModal()">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                
+                <!-- Hero Image Container (For standard blog posts) -->
+                <div id="modal-image-container" class="w-full aspect-video overflow-hidden rounded-xl mb-6 hidden shadow-sm">
+                    <img id="modal-post-image" class="w-full h-full object-cover" src="" alt="Post image" />
+                </div>
+
+                <span id="modal-post-date" class="font-label-md text-secondary opacity-70 block mb-2">Date</span>
+                <h3 id="modal-post-title" class="font-headline-serif text-3xl text-primary font-bold mb-4">Post Title</h3>
+                
+                <div id="modal-post-desc-container" class="font-body-lg text-body-lg text-on-surface-variant leading-relaxed mb-6 whitespace-pre-wrap">
+                    Post full content goes here...
+                </div>
+                
+                <div class="border-t border-ceramic pt-6 flex justify-between items-center">
+                    <span id="modal-post-label" class="font-label-md text-gold flex items-center gap-1 text-sm font-semibold">
+                        <span class="material-symbols-outlined text-[18px]">star</span>
+                        Label
+                    </span>
+                    <button id="modal-edit-entry-btn" onclick="redirectToEditEntry()" class="bg-ceramic hover:bg-[#dcdad5] text-primary px-4 py-2 rounded-full font-bold text-xs flex items-center gap-1.5 active-scale transition-colors hidden">
+                        <span class="material-symbols-outlined text-[16px]">edit</span>
+                        Edit Entry
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Floating Frap CTA -->
+    <button onclick="toggleManifesto()" class="fixed bottom-space-4 right-space-4 w-14 h-14 bg-primary hover:bg-[#005e3a] text-white rounded-full flex items-center justify-center frap-shadow active-scale z-[60] transition-all hover:scale-110" title="Melanie's Manifesto">
+        <span class="material-symbols-outlined text-2xl" data-icon="local_drink" style="font-variation-settings: 'FILL' 1;">local_drink</span>
+    </button>
+
+    <!-- Manifesto Slide-Over Panel -->
+    <div id="manifesto-panel" class="fixed inset-0 bg-black/40 backdrop-blur-sm z-[100] hidden transition-opacity duration-300 opacity-0" onclick="toggleManifesto()">
+        <div class="absolute right-0 top-0 bottom-0 w-full max-w-md bg-canvas-warm p-8 flex flex-col justify-between shadow-2xl border-l border-ceramic transform translate-x-full transition-transform duration-300" onclick="event.stopPropagation()">
+            <div>
+                <div class="flex justify-between items-center mb-10">
+                    <span class="font-headline-md text-headline-md text-primary tracking-widest uppercase">MANIFESTO</span>
+                    <button class="p-2 hover:bg-ceramic rounded-full active-scale" onclick="toggleManifesto()">
+                        <span class="material-symbols-outlined">close</span>
+                    </button>
+                </div>
+                <h3 class="font-headline-serif text-3xl text-primary-container mb-6 leading-tight">The Melanie Archive Philosophy</h3>
+                <div class="space-y-6 font-body-lg text-body-lg text-on-surface-variant leading-relaxed">
+                    <p class="italic">"Design is not just what it looks like and feels like. Design is how it works... and how it remembers."</p>
+                    <p>Melanie's Archive treats every project entry as a curated gallery piece, minimizing digital 'noise' to give space for physical monograph craftsmanship and creative focus.</p>
+                    <p>We embrace raw textures, brutalist grids, and loose typography, creating a digital workspace built with absolute intention.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script>
+        let currentFilter = 'All'; // Projects view status filter
+        let activeTypeFilter = 'All'; // Entries view type filter
+        let currentSort = 'date-desc'; // Entries view sort filter
+        let currentViewMode = 'projects'; // 'projects' or 'entries'
+        let searchQuery = '';
+        let activeModalEntry = null; // Stores { post, project } currently in lightbox
+        let currentPage = 1;
+        const projectsPerPage = 6;
+
+        // Initialize view
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const searchParam = urlParams.get('search');
+            const modeParam = urlParams.get('mode');
+
+            if (searchParam) {
+                searchQuery = decodeURIComponent(searchParam);
+                document.getElementById('gallery-search').value = searchQuery;
+                document.getElementById('header-search').value = searchQuery;
+                currentViewMode = 'entries'; // Search defaults to searching entries
+            } else if (modeParam) {
+                currentViewMode = modeParam;
+            }
+
+            setViewMode(currentViewMode);
+            updateProfileSection();
+            renderTypeFilters();
+            setupSearchInteractions();
+        });
+
+        function updateProfileSection() {
+            const profileSec = document.getElementById('user-profile-sec');
+            const nav = document.getElementById('sidebar-nav');
+            const newBtn = document.getElementById('sidebar-new-btn');
+            const archivedBtn = document.getElementById('filter-archived-btn');
+            const headerProfileSec = document.getElementById('header-profile-sec');
+
+            if (db.isAuthenticated()) {
+                if (archivedBtn) archivedBtn.classList.remove('hidden');
+                const user = db.getCurrentUser();
+                if (newBtn) newBtn.classList.remove('hidden');
+                
+                if (nav) {
+                    nav.innerHTML = `
+                        <a class="flex items-center gap-space-3 py-space-2 rounded-lg text-primary font-bold border-r-4 border-primary pl-4 hover:bg-ceramic transition-colors active-scale" href="index.html">
+                            <span class="material-symbols-outlined">dashboard</span>
+                            <span class="font-label-md text-label-md">Overview</span>
+                        </a>
+                        <a class="flex items-center gap-space-3 py-space-2 rounded-lg text-on-surface-variant pl-4 hover:bg-ceramic transition-colors active-scale" href="manage-projects.html">
+                            <span class="material-symbols-outlined">folder_open</span>
+                            <span class="font-label-md text-label-md">Projects</span>
+                        </a>
+                        <a class="flex items-center gap-space-3 py-space-2 rounded-lg text-on-surface-variant pl-4 hover:bg-ceramic transition-colors active-scale" href="dashboard.html">
+                            <span class="material-symbols-outlined">settings</span>
+                            <span class="font-label-md text-label-md">Admin Panel</span>
+                        </a>
+                    `;
+                }
+                
+                if (profileSec) {
+                    profileSec.innerHTML = `
+                        <div class="flex items-center justify-between w-full gap-space-2 px-space-2">
+                            <div class="flex items-center gap-space-2">
+                                <img alt="Melanie O." class="w-8 h-8 rounded-full border border-outline-variant" src="https://www.applesfromny.com/wp-content/uploads/2020/05/20Ounce_NYAS-Apples2.png"/>
+                                <div>
+                                    <p class="font-label-md text-label-md leading-none">${user.name}</p>
+                                    <p class="text-[10px] text-on-surface-variant opacity-60">Director</p>
+                                </div>
+                            </div>
+                            <button onclick="handleLogout()" class="p-1 hover:bg-surface-container rounded-full text-error transition-colors" title="Log Out">
+                                <span class="material-symbols-outlined text-[18px]">logout</span>
+                            </button>
+                        </div>
+                    `;
+                }
+
+                if (headerProfileSec) {
+                    headerProfileSec.innerHTML = `
+                        <a href="dashboard.html" class="block h-10 w-10 rounded-full overflow-hidden border border-outline-variant active-scale transition-transform" title="Admin Panel">
+                            <img alt="Melanie O." class="w-full h-full object-cover" src="https://www.applesfromny.com/wp-content/uploads/2020/05/20Ounce_NYAS-Apples2.png"/>
+                        </a>
+                    `;
+                }
+            } else {
+                if (archivedBtn) archivedBtn.classList.add('hidden');
+                if (newBtn) newBtn.classList.add('hidden');
+                
+                if (nav) {
+                    nav.innerHTML = `
+                        <a class="flex items-center gap-space-3 py-space-2 rounded-lg text-primary font-bold border-r-4 border-primary pl-4 hover:bg-ceramic transition-colors active-scale" href="index.html">
+                            <span class="material-symbols-outlined">dashboard</span>
+                            <span class="font-label-md text-label-md">Overview</span>
+                        </a>
+                    `;
+                }
+                
+                if (profileSec) {
+                    profileSec.innerHTML = `
+                        <div class="w-full flex flex-col gap-space-2 px-space-2">
+                            <div class="flex items-center gap-space-2 mb-1">
+                                <span class="material-symbols-outlined text-outline text-2xl">account_circle</span>
+                                <div>
+                                    <p class="font-label-md text-label-md leading-none">Guest Mode</p>
+                                    <p class="text-[10px] text-on-surface-variant opacity-60">Visitor</p>
+                                </div>
+                            </div>
+                            <a href="login.html" class="w-full text-center bg-primary text-white py-space-2 rounded-full font-label-md text-label-md hover:bg-primary-container active-scale transition-transform flex items-center justify-center gap-2">
+                                <span class="material-symbols-outlined text-[18px]">login</span>
+                                <span>Sign In</span>
+                            </a>
+                        </div>
+                    `;
+                }
+
+                if (headerProfileSec) {
+                    headerProfileSec.innerHTML = `
+                        <a href="login.html" class="p-2 hover:opacity-80 transition-opacity cursor-pointer text-secondary flex items-center justify-center" title="Sign In">
+                            <span class="material-symbols-outlined text-2xl">account_circle</span>
+                        </a>
+                    `;
+                }
+            }
+        }
+
+        function handleLogout() {
+            db.logout();
+            window.location.reload();
+        }
+
+        function handleNewEntry() {
+            if (db.isAuthenticated()) {
+                window.location.href = 'manage-projects.html?action=new-entry';
+            } else {
+                window.location.href = 'login.html?redirect=manage-projects.html?action=new-entry';
+            }
+        }
+
+        function setViewMode(mode) {
+            currentPage = 1;
+            currentViewMode = mode;
+            const projBtn = document.getElementById('view-mode-projects-btn');
+            const entryBtn = document.getElementById('view-mode-entries-btn');
+            const projPanel = document.getElementById('projects-filter-panel');
+            const entryPanel = document.getElementById('entries-filter-panel');
+            const searchInput = document.getElementById('gallery-search');
+
+            if (mode === 'projects') {
+                projBtn.className = 'px-5 py-2.5 rounded-full font-label-md transition-all duration-300 flex items-center gap-2 bg-primary text-white border border-primary active-scale shadow-sm';
+                entryBtn.className = 'px-5 py-2.5 rounded-full font-label-md transition-all duration-300 flex items-center gap-2 border border-outline text-on-surface hover:bg-surface-container-high active-scale';
+                projPanel.classList.remove('hidden');
+                entryPanel.classList.add('hidden');
+                searchInput.placeholder = 'Search projects...';
+            } else {
+                projBtn.className = 'px-5 py-2.5 rounded-full font-label-md transition-all duration-300 flex items-center gap-2 border border-outline text-on-surface hover:bg-surface-container-high active-scale';
+                entryBtn.className = 'px-5 py-2.5 rounded-full font-label-md transition-all duration-300 flex items-center gap-2 bg-primary text-white border border-primary active-scale shadow-sm';
+                projPanel.classList.add('hidden');
+                entryPanel.classList.remove('hidden');
+                searchInput.placeholder = 'Search all timeline entries...';
+            }
+
+            renderView();
+        }
+
+        function renderView() {
+            if (currentViewMode === 'projects') {
+                renderProjects();
+            } else {
+                renderEntries();
+            }
+        }
+
+        function distributeWaterfall(items, gridContainer) {
+            gridContainer.innerHTML = '';
+            
+            // Determine column count based on viewport width (responsive)
+            let numCols = 1;
+            if (window.innerWidth >= 1024) {
+                numCols = 3;
+            } else if (window.innerWidth >= 768) {
+                numCols = 2;
+            }
+            
+            // Reconfigure grid class to display columns side-by-side using Tailwind grid structure
+            gridContainer.className = `grid grid-cols-1 md:grid-cols-${Math.min(2, numCols)} lg:grid-cols-${numCols} gap-space-4 items-start w-full`;
+            
+            const colDivs = [];
+            for (let i = 0; i < numCols; i++) {
+                const col = document.createElement('div');
+                col.className = 'flex flex-col gap-space-4 w-full';
+                gridContainer.appendChild(col);
+                colDivs.push(col);
+            }
+            
+            const colHeights = new Array(numCols).fill(0);
+            
+            items.forEach(card => {
+                // Estimate height to keep columns beautifully balanced
+                let estHeight = 250;
+                const img = card.querySelector('img');
+                const p = card.querySelector('p');
+                const descLen = p ? (p.textContent || '').length : 0;
+                
+                if (img) estHeight += 200;
+                if (card.dataset.isNote === 'true') estHeight += 80;
+                estHeight += Math.min(180, descLen * 0.4);
+                
+                // Find column with minimum height
+                let minIndex = 0;
+                let minHeight = colHeights[0];
+                for (let i = 1; i < numCols; i++) {
+                    if (colHeights[i] < minHeight) {
+                        minHeight = colHeights[i];
+                        minIndex = i;
+                    }
+                }
+                
+                colDivs[minIndex].appendChild(card);
+                colHeights[minIndex] += estHeight;
+            });
+        }
+
+        function renderProjects() {
+            const grid = document.getElementById('projects-grid');
+            const paginationEl = document.getElementById('projects-pagination');
+            grid.innerHTML = '';
+            
+            let projects = db.getProjects();
+
+            // Private Archives guest shielding
+            const isAuth = db.isAuthenticated();
+            if (!isAuth) {
+                projects = projects.filter(p => p.status !== 'Draft' && p.status !== 'Archived');
+            }
+
+            // Apply search filter
+            if (searchQuery.trim() !== '') {
+                const query = searchQuery.toLowerCase();
+                projects = projects.filter(p => 
+                    p.title.toLowerCase().includes(query) || 
+                    p.category.toLowerCase().includes(query) || 
+                    p.description.toLowerCase().includes(query)
+                );
+            }
+
+            // Apply status filter
+            if (currentFilter !== 'All') {
+                projects = projects.filter(p => {
+                    const status = p.status ? p.status.toLowerCase() : '';
+                    if (currentFilter === 'Ongoing') {
+                        return status === 'ongoing' || status === 'in progress' || status === 'active';
+                    }
+                    return status === currentFilter.toLowerCase();
+                });
+            }
+
+            if (projects.length === 0) {
+                grid.className = 'block w-full';
+                grid.innerHTML = `
+                    <div class="py-12 text-center text-on-surface-variant w-full">
+                        <span class="material-symbols-outlined text-5xl mb-4 text-outline">folder_off</span>
+                        <p class="font-body-lg">No projects match the active criteria.</p>
+                    </div>
+                `;
+                paginationEl.classList.add('hidden');
+                paginationEl.innerHTML = '';
+                return;
+            }
+
+            // Paginate projects
+            const totalProjects = projects.length;
+            const totalPages = Math.ceil(totalProjects / projectsPerPage);
+            if (currentPage > totalPages) currentPage = Math.max(1, totalPages);
+            
+            const paginatedProjects = projects.slice((currentPage - 1) * projectsPerPage, currentPage * projectsPerPage);
+
+            const cards = [];
+            paginatedProjects.forEach(p => {
+                const card = document.createElement('div');
+                card.className = 'bg-surface rounded-xl card-whisper group cursor-pointer overflow-hidden transition-all duration-300 hover:-translate-y-1 active-scale w-full';
+                card.onclick = () => window.location.href = `project-detail.html?id=${p.id}`;
+
+                let aspect = 'aspect-[4/3]';
+                if (p.id === '2') aspect = 'aspect-[3/4]';
+                if (p.id === '3') aspect = 'aspect-video';
+                if (p.id === '4') aspect = 'aspect-square';
+                if (p.id === '5') aspect = 'aspect-[4/5]';
+
+                const statusColor = p.status === 'Ongoing' ? 'bg-[#d4e9e2] text-[#006c44]' : (p.status === 'Featured' ? 'bg-[#00482f] text-white' : 'bg-ceramic text-on-surface-variant');
+
+                card.innerHTML = `
+                    <div class="relative overflow-hidden ${aspect}">
+                        <img alt="${p.title}" class="w-full h-full object-cover transition-transform duration-700 group-hover:scale-110" src="${p.imageUrl}"/>
+                        <div class="absolute top-space-2 left-space-2">
+                            <span class="${statusColor} px-3 py-1 rounded-full font-label-md text-[10px] uppercase tracking-widest">${p.status}</span>
+                        </div>
+                    </div>
+                    <div class="p-space-4 text-left">
+                        <div class="flex justify-between items-start mb-2">
+                            <h3 class="font-headline-serif text-headline-serif text-primary text-xl">${p.title}</h3>
+                            <span class="font-label-md text-on-surface-variant text-sm">${p.year}</span>
+                        </div>
+                        <p class="text-on-surface-variant line-clamp-2">${p.description}</p>
+                        <div class="mt-space-4 flex gap-2">
+                            <span class="px-2 py-1 bg-green-light rounded-md text-[10px] font-bold text-secondary uppercase">${p.category.split('/')[0].trim()}</span>
+                            ${p.category.split('/')[1] ? `<span class="px-2 py-1 bg-ceramic rounded-md text-[10px] font-bold text-outline uppercase">${p.category.split('/')[1].trim()}</span>` : ''}
+                        </div>
+                    </div>
+                `;
+                cards.push(card);
+            });
+
+            // Append Manifesto card as a secondary element if looking at All Projects and on first page
+            if (currentFilter === 'All' && searchQuery === '' && currentPage === 1) {
+                const manifestoCard = document.createElement('div');
+                manifestoCard.className = 'bg-secondary text-on-secondary rounded-xl card-whisper group cursor-pointer overflow-hidden transition-all duration-300 hover:-translate-y-1 active-scale p-space-5 w-full text-left';
+                manifestoCard.onclick = toggleManifesto;
+                manifestoCard.innerHTML = `
+                    <span class="material-symbols-outlined text-4xl mb-4" data-icon="edit_note">edit_note</span>
+                    <h3 class="font-headline-serif text-headline-serif mb-2 text-2xl text-white">The Archive Manifesto</h3>
+                    <p class="opacity-80 font-body-md mb-6 italic">"Design is not just what it looks like and feels like. Design is how it works... and how it remembers."</p>
+                    <div class="flex items-center gap-2">
+                        <div class="h-[1px] flex-1 bg-white/30"></div>
+                        <span class="font-label-md text-[10px] uppercase tracking-widest text-white">Read Essence</span>
+                        <div class="h-[1px] flex-1 bg-white/30"></div>
+                    </div>
+                `;
+                cards.push(manifestoCard);
+            }
+
+            distributeWaterfall(cards, grid);
+
+            // Render Pagination Controls
+            if (totalPages > 1) {
+                paginationEl.innerHTML = '';
+                paginationEl.className = 'mt-space-5 flex justify-center items-center gap-2';
+                
+                // Previous button
+                const prevBtn = document.createElement('button');
+                prevBtn.className = `w-10 h-10 flex items-center justify-center rounded-full border transition-all active-scale ${currentPage === 1 ? 'border-outline-variant text-outline-variant cursor-not-allowed' : 'border-outline hover:bg-surface-container-high text-on-surface'}`;
+                prevBtn.disabled = currentPage === 1;
+                prevBtn.onclick = () => {
+                    currentPage--;
+                    renderProjects();
+                };
+                prevBtn.innerHTML = '<span class="material-symbols-outlined text-[18px]">chevron_left</span>';
+                paginationEl.appendChild(prevBtn);
+                
+                // Page numbers
+                for (let i = 1; i <= totalPages; i++) {
+                    const pageBtn = document.createElement('button');
+                    pageBtn.className = `w-10 h-10 flex items-center justify-center rounded-full font-bold active-scale transition-all ${currentPage === i ? 'bg-primary text-white border border-primary' : 'border border-outline hover:bg-surface-container-high text-on-surface'}`;
+                    pageBtn.onclick = () => {
+                        currentPage = i;
+                        renderProjects();
+                    };
+                    pageBtn.innerText = i;
+                    paginationEl.appendChild(pageBtn);
+                }
+                
+                // Next button
+                const nextBtn = document.createElement('button');
+                nextBtn.className = `w-10 h-10 flex items-center justify-center rounded-full border transition-all active-scale ${currentPage === totalPages ? 'border-outline-variant text-outline-variant cursor-not-allowed' : 'border-outline hover:bg-surface-container-high text-on-surface'}`;
+                nextBtn.disabled = currentPage === totalPages;
+                nextBtn.onclick = () => {
+                    currentPage++;
+                    renderProjects();
+                };
+                nextBtn.innerHTML = '<span class="material-symbols-outlined text-[18px]">chevron_right</span>';
+                paginationEl.appendChild(nextBtn);
+                paginationEl.classList.remove('hidden');
+            } else {
+                paginationEl.classList.add('hidden');
+                paginationEl.innerHTML = '';
+            }
+        }
+
+        // Parse date for sorting
+        function parseEntryDate(dateStr) {
+            const parsed = Date.parse(dateStr);
+            return isNaN(parsed) ? 0 : parsed;
+        }
+
+        function parseMarkdown(text) {
+            if (!text) return '';
+            let html = text
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;");
+            html = html.replace(/^(?:#|###)\s*(.*?)$/gm, '<h3 class="text-base md:text-lg font-bold text-primary mt-4 mb-2">$1</h3>');
+            html = html.replace(/^&gt;\s*(.*?)$/gm, '<blockquote class="border-l-4 border-gold pl-3 py-1 my-3 italic text-on-surface-variant bg-gold-lightest/50 rounded-r">$1</blockquote>');
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/\*(.*?)\*/g, '<em>$1</em>');
+            html = html.replace(/~~(.*?)~~/g, '<del>$1</del>');
+            html = html.replace(/__(.*?)__/g, '<u>$1</u>');
+            html = html.replace(/\n/g, '<br>');
+            return html;
+        }
+
+        function renderEntries() {
+            const grid = document.getElementById('projects-grid');
+            const paginationEl = document.getElementById('projects-pagination');
+            grid.innerHTML = '';
+            if (paginationEl) {
+                paginationEl.classList.add('hidden');
+                paginationEl.innerHTML = '';
+            }
+
+            const projects = db.getProjects();
+            let allEntries = [];
+
+            // Gather and flatten all milestones/entries (with security filter)
+            projects.forEach(p => {
+                if (!db.isAuthenticated() && (p.status === 'Draft' || p.status === 'Archived')) return;
+                
+                if (p.milestones && Array.isArray(p.milestones)) {
+                    p.milestones.forEach(m => {
+                        if (m.isDraft) return; // Skip drafts from public gallery
+                        allEntries.push({
+                            ...m,
+                            project: p,
+                            projectId: p.id,
+                            projectTitle: p.title,
+                            projectStatus: p.status
+                        });
+                    });
+                }
+            });
+
+            // Filter entries by Search Query
+            if (searchQuery.trim() !== '') {
+                const q = searchQuery.toLowerCase();
+                allEntries = allEntries.filter(m => 
+                    (m.title || '').toLowerCase().includes(q) ||
+                    (m.description || '').toLowerCase().includes(q) ||
+                    (m.type && m.type.toLowerCase().includes(q)) ||
+                    (m.label && m.label.toLowerCase().includes(q)) ||
+                    (m.projectTitle || '').toLowerCase().includes(q)
+                );
+            }
+
+            // Filter entries by Type
+            if (activeTypeFilter !== 'All') {
+                allEntries = allEntries.filter(m => m.type && m.type.toLowerCase() === activeTypeFilter.toLowerCase());
+            }
+
+            // Sort entries
+            allEntries.sort((a, b) => {
+                if (currentSort === 'date-desc') {
+                    return parseEntryDate(b.date) - parseEntryDate(a.date);
+                } else if (currentSort === 'date-asc') {
+                    return parseEntryDate(a.date) - parseEntryDate(b.date);
+                } else if (currentSort === 'title-asc') {
+                    return a.title.localeCompare(b.title);
+                } else if (currentSort === 'title-desc') {
+                    return b.title.localeCompare(a.title);
+                }
+                return 0;
+            });
+
+            if (allEntries.length === 0) {
+                grid.className = 'block w-full';
+                grid.innerHTML = `
+                    <div class="py-12 text-center text-on-surface-variant w-full">
+                        <span class="material-symbols-outlined text-5xl mb-4 text-outline">history</span>
+                        <p class="font-body-lg">No entries match the active criteria.</p>
+                    </div>
+                `;
+                return;
+            }
+
+            const fallbackImg = "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=600&q=80";
+            const cards = [];
+
+            allEntries.forEach(m => {
+                const card = document.createElement('article');
+                card.onclick = () => openPostModal(m, m.project);
+
+                const iconName = m.icon || 'star';
+                const badgeLabel = m.label || 'Milestone';
+                const dateStr = m.editedDate ? `${m.date} (Edited: ${m.editedDate})` : (m.date || 'Jan 12, 2026');
+                const typeVal = m.type || 'Note';
+
+                if (m.isNote) {
+                    // Elegant Notepad Note Card
+                    card.className = 'group bg-[#faf6ee] border-l-4 border-l-secondary border-t border-r border-b border-outline-variant rounded-xl p-6 hover:shadow-lg transition-all duration-300 hover:border-primary-container press-active cursor-pointer relative overflow-hidden text-left w-full';
+                    card.dataset.isNote = 'true';
+                    card.innerHTML = `
+                        <div class="flex justify-between items-center mb-4">
+                            <span class="bg-[#faf6ee] text-[#006c47] border border-[#006c47]/30 px-2.5 py-0.5 rounded-full text-[10px] font-bold uppercase tracking-wider">${typeVal}</span>
+                            <div class="flex items-center gap-1 text-[11px] text-outline font-semibold">
+                                <span class="material-symbols-outlined text-base">${iconName}</span>
+                                <span>${badgeLabel}</span>
+                            </div>
+                        </div>
+                        <h3 class="font-headline-serif text-lg text-primary font-bold mb-2 group-hover:text-primary-container transition-colors leading-tight">${m.title}</h3>
+                        <p class="font-body-md text-sm text-on-surface-variant leading-relaxed mb-4">${parseMarkdown(m.description)}</p>
+                        <div class="pt-3 border-t border-ceramic flex justify-between items-center text-xs text-outline">
+                            <div>
+                                <span class="font-semibold">${dateStr}</span>
+                                <span class="mx-1.5 opacity-40">•</span>
+                                <span class="text-[10px] text-secondary font-bold uppercase">${m.projectTitle}</span>
+                            </div>
+                            <span class="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                        </div>
+                    `;
+                } else {
+                    // Standard Photo Masonry Card
+                    card.className = 'group bg-surface-container-lowest border border-outline-variant hover:border-primary-container transition-all duration-300 hover:shadow-lg press-active cursor-pointer flex flex-col justify-between overflow-hidden rounded-xl text-left w-full';
+                    const imgUrl = m.imageUrl || fallbackImg;
+                    card.innerHTML = `
+                        <div class="aspect-video relative overflow-hidden border-b border-ceramic">
+                            <img class="w-full h-full object-cover transition-transform duration-500 group-hover:scale-105" src="${imgUrl}" alt="${m.title}"/>
+                            <div class="absolute top-4 left-4 bg-primary-container text-white px-3 py-1 rounded-full text-[10px] font-bold uppercase tracking-wider">${typeVal}</div>
+                        </div>
+                        <div class="p-5 flex-grow flex flex-col justify-between">
+                            <div>
+                                <div class="flex items-center gap-1.5 text-xs text-secondary opacity-70">
+                                    <span>${dateStr}</span>
+                                    <span>•</span>
+                                    <span class="font-bold text-[10px] text-primary uppercase">${m.projectTitle}</span>
+                                </div>
+                                <h3 class="font-headline-md text-headline-md text-on-surface mt-2 group-hover:text-primary-container transition-colors text-xl font-bold line-clamp-1">${m.title}</h3>
+                                <p class="font-body-md text-body-md text-on-surface-variant mt-2 line-clamp-2">${m.description}</p>
+                            </div>
+                            <div class="mt-6 pt-4 border-t border-ceramic flex justify-between items-center">
+                                <span class="font-label-md text-gold flex items-center gap-1 text-sm font-semibold">
+                                    <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">${iconName}</span>
+                                    ${badgeLabel}
+                                </span>
+                                <span class="material-symbols-outlined text-outline group-hover:translate-x-1 transition-transform">arrow_forward</span>
+                            </div>
+                        </div>
+                    `;
+                }
+                cards.push(card);
+            });
+
+            distributeWaterfall(cards, grid);
+        }
+
+        function setFilter(filter) {
+            currentPage = 1;
+            currentFilter = filter;
+            const buttons = document.querySelectorAll('.filter-btn');
+            buttons.forEach(btn => {
+                btn.className = 'filter-btn px-5 py-2 rounded-full font-label-md transition-all active-scale border border-outline text-on-surface hover:bg-surface-container-high';
+                if (btn.textContent.includes(filter) || (filter === 'All' && btn.textContent.includes('All Projects'))) {
+                    btn.className = 'filter-btn px-5 py-2 rounded-full font-label-md transition-all active-scale bg-primary text-white border border-primary';
+                }
+            });
+            renderProjects();
+        }
+
+        function renderTypeFilters() {
+            const container = document.getElementById('entry-type-filters-container');
+            if (!container) return;
+            const categories = db.getCategories();
+            container.innerHTML = `
+                <span class="font-label-md text-outline uppercase tracking-wider mr-2 text-xs">Type:</span>
+                <button onclick="setEntryTypeFilter('All')" class="entry-type-btn px-4 py-1.5 rounded-full font-label-md text-xs transition-all active-scale ${activeTypeFilter === 'All' ? 'bg-primary text-white border border-primary' : 'border border-outline text-on-surface hover:bg-surface-container-high'}">All Types</button>
+            `;
+            categories.forEach(cat => {
+                const isActive = activeTypeFilter.toLowerCase() === cat.toLowerCase();
+                container.innerHTML += `
+                    <button onclick="setEntryTypeFilter('${cat}')" class="entry-type-btn px-4 py-1.5 rounded-full font-label-md text-xs transition-all active-scale ${isActive ? 'bg-primary text-white border border-primary' : 'border border-outline text-on-surface hover:bg-surface-container-high'}">${cat}</button>
+                `;
+            });
+        }
+
+        function setEntryTypeFilter(typeVal) {
+            activeTypeFilter = typeVal;
+            renderTypeFilters();
+            renderEntries();
+        }
+
+        function setEntrySort(sortVal) {
+            currentSort = sortVal;
+            renderEntries();
+        }
+
+        function setupSearchInteractions() {
+            const gallerySearch = document.getElementById('gallery-search');
+            const headerSearch = document.getElementById('header-search');
+
+            const handleSearchInput = (value) => {
+                currentPage = 1;
+                searchQuery = value;
+                gallerySearch.value = searchQuery;
+                headerSearch.value = searchQuery;
+
+                // Typing in search switches to Entries Mode automatically!
+                if (currentViewMode !== 'entries' && searchQuery.trim() !== '') {
+                    setViewMode('entries');
+                } else {
+                    renderView();
+                }
+            };
+
+            gallerySearch.addEventListener('input', (e) => handleSearchInput(e.target.value));
+            headerSearch.addEventListener('input', (e) => handleSearchInput(e.target.value));
+
+            // Expand on focus
+            headerSearch.addEventListener('focus', () => {
+                headerSearch.classList.add('w-80');
+                headerSearch.classList.remove('w-64');
+            });
+            headerSearch.addEventListener('blur', () => {
+                headerSearch.classList.remove('w-80');
+                headerSearch.classList.add('w-64');
+            });
+        }
+
+        // Window resize debouncer for responsive columns
+        let resizeTimer;
+        window.addEventListener('resize', () => {
+            clearTimeout(resizeTimer);
+            resizeTimer = setTimeout(() => {
+                renderView();
+            }, 100);
+        });
+
+        function openPostModal(post, project) {
+            const modal = document.getElementById('post-modal');
+            const child = modal.firstElementChild;
+            
+            activeModalEntry = { post, project };
+            
+            document.getElementById('modal-post-type').innerText = post.type || 'Note';
+            document.getElementById('modal-project-title').innerText = `Project: ${project.title}`;
+            
+            const displayDate = post.editedDate ? `${post.date} (Edited: ${post.editedDate})` : post.date;
+            document.getElementById('modal-post-date').innerText = displayDate;
+            
+            document.getElementById('modal-post-title').innerText = post.title;
+            document.getElementById('modal-post-desc-container').innerHTML = parseMarkdown(post.description);
+            
+            const labelSpan = document.getElementById('modal-post-label');
+            labelSpan.innerHTML = `
+                <span class="material-symbols-outlined text-[18px]" style="font-variation-settings: 'FILL' 1;">${post.icon || 'star'}</span>
+                ${post.label || 'Milestone'}
+            `;
+
+            const imgContainer = document.getElementById('modal-image-container');
+
+            if (post.isNote) {
+                imgContainer.classList.add('hidden');
+            } else {
+                imgContainer.classList.remove('hidden');
+                const fallbackImg = "https://images.unsplash.com/photo-1542751371-adc38448a05e?auto=format&fit=crop&w=800&q=80";
+                const postImg = post.imageUrl || fallbackImg;
+                document.getElementById('modal-post-image').src = postImg;
+                document.getElementById('modal-post-image').alt = post.title;
+            }
+
+            const editBtn = document.getElementById('modal-edit-entry-btn');
+            if (editBtn) {
+                if (db.isAuthenticated()) {
+                    editBtn.classList.remove('hidden');
+                } else {
+                    editBtn.classList.add('hidden');
+                }
+            }
+
+            modal.classList.remove('hidden');
+            setTimeout(() => {
+                modal.classList.remove('opacity-0');
+                child.classList.remove('scale-95');
+            }, 10);
+        }
+
+        function closePostModal() {
+            const modal = document.getElementById('post-modal');
+            const child = modal.firstElementChild;
+            
+            modal.classList.add('opacity-0');
+            child.classList.add('scale-95');
+            setTimeout(() => {
+                modal.classList.add('hidden');
+            }, 300);
+        }
+
+        function redirectToEditEntry() {
+            if (!activeModalEntry) return;
+            const p = activeModalEntry.project;
+            const m = activeModalEntry.post;
+            const index = p.milestones.indexOf(m);
+            if (index !== -1) {
+                window.location.href = `project-detail.html?id=${p.id}&openEdit=${index}`;
+            }
+        }
+
+        function toggleManifesto() {
+            const panel = document.getElementById('manifesto-panel');
+            const child = panel.firstElementChild;
+            if (panel.classList.contains('hidden')) {
+                panel.classList.remove('hidden');
+                setTimeout(() => {
+                    panel.classList.remove('opacity-0');
+                    child.classList.remove('translate-x-full');
+                }, 10);
+            } else {
+                panel.classList.add('opacity-0');
+                child.classList.add('translate-x-full');
+                setTimeout(() => {
+                    panel.classList.add('hidden');
+                }, 300);
+            }
+        }
+
+        // Header opacity shift on scroll
+        window.addEventListener('scroll', () => {
+            const header = document.querySelector('header');
+            if (window.scrollY > 20) {
+                header.classList.add('opacity-70');
+            } else {
+                header.classList.remove('opacity-70');
+            }
+        });
+
+        function toggleMobileMenu() {
+            const nav = document.getElementById('sidebar-nav');
+            const bottomSec = document.getElementById('sidebar-bottom-sec');
+            const toggleIcon = document.querySelector('#mobile-menu-toggle span');
+            
+            if (nav.classList.contains('hidden')) {
+                nav.classList.remove('hidden');
+                nav.classList.add('flex');
+                if (bottomSec) {
+                    bottomSec.classList.remove('hidden');
+                    bottomSec.classList.add('flex');
+                }
+                if (toggleIcon) toggleIcon.innerText = 'close';
+            } else {
+                nav.classList.add('hidden');
+                nav.classList.remove('flex');
+                if (bottomSec) {
+                    bottomSec.classList.add('hidden');
+                    bottomSec.classList.remove('flex');
+                }
+                if (toggleIcon) toggleIcon.innerText = 'menu';
+            }
+        }
+    </script>
+</body>
+</html>
