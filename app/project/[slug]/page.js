@@ -13,6 +13,7 @@ export default function ProjectDetailPage({ params }) {
   const [activeTypeFilter, setActiveTypeFilter] = useState('All');
   const [currentSort, setCurrentSort] = useState('date-desc');
   const [searchQuery, setSearchQuery] = useState('');
+  const [customCoverUrl, setCustomCoverUrl] = useState(null);
 
   // Mobile Menu State
   const [mobileMenuOpen, setMobileMenuOpen] = useState(false);
@@ -83,6 +84,22 @@ export default function ProjectDetailPage({ params }) {
       const storedTheme = localStorage.getItem('mel_scrapbook_theme');
       if (storedTheme === 'true') {
         setScrapbookMode(true);
+      }
+
+      const storedCovers = localStorage.getItem('mel_journey_covers');
+      if (storedCovers) {
+        try {
+          const covers = JSON.parse(storedCovers);
+          if (covers[slug]) {
+            setCustomCoverUrl(covers[slug]);
+          } else {
+            setCustomCoverUrl(null);
+          }
+        } catch (e) {
+          console.error(e);
+        }
+      } else {
+        setCustomCoverUrl(null);
       }
     }
     loadData();
@@ -202,7 +219,7 @@ export default function ProjectDetailPage({ params }) {
     );
   }
 
-  const featuredImgUrl = post.featuredImage?.node?.sourceUrl || "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80";
+  const featuredImgUrl = customCoverUrl || post.featuredImage?.node?.sourceUrl || "https://images.unsplash.com/photo-1498050108023-c5249f4df085?auto=format&fit=crop&w=600&q=80";
 
   return (
     <div className={`flex flex-col md:flex-row h-screen overflow-hidden page-fade-in font-body-md bg-canvas-warm ${scrapbookMode ? 'scrapbook-mode' : ''}`}>
@@ -331,8 +348,35 @@ export default function ProjectDetailPage({ params }) {
               </div>
 
               {/* Hero Project Image Banner */}
-              <div className="w-full h-96 overflow-hidden rounded-xl mb-12 shadow-sm border border-ceramic scrapbook-photo-card">
+              <div className="w-full h-96 overflow-hidden rounded-xl mb-12 shadow-sm border border-ceramic scrapbook-photo-card relative group/hero">
                 <img className="w-full h-full object-cover" src={featuredImgUrl} alt={post.title}/>
+                
+                {/* Edit Picture Button Overlay */}
+                <button 
+                  onClick={() => {
+                    const newUrl = prompt("Enter a custom cover image URL for this Journey (leave blank to restore default):", customCoverUrl || "");
+                    if (newUrl !== null) {
+                      const storedCovers = localStorage.getItem('mel_journey_covers') || '{}';
+                      try {
+                        const covers = JSON.parse(storedCovers);
+                        if (newUrl.trim() === '') {
+                          delete covers[slug];
+                          setCustomCoverUrl(null);
+                        } else {
+                          covers[slug] = newUrl.trim();
+                          setCustomCoverUrl(newUrl.trim());
+                        }
+                        localStorage.setItem('mel_journey_covers', JSON.stringify(covers));
+                      } catch (e) {
+                        console.error(e);
+                      }
+                    }
+                  }}
+                  className="absolute bottom-4 right-4 bg-black/60 hover:bg-black/80 backdrop-blur-sm text-white px-4 py-2 rounded-full font-bold text-xs flex items-center gap-1.5 active-scale transition-all opacity-0 group-hover/hero:opacity-100 shadow-md border border-white/10"
+                >
+                  <span className="material-symbols-outlined text-[16px]">edit</span>
+                  <span>Edit Picture</span>
+                </button>
               </div>
 
               {/* Filter Timeline Bar */}
